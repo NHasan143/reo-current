@@ -153,17 +153,32 @@ export interface Post {
     };
     [k: string]: unknown;
   } | null;
+  seo?: {
+    /**
+     * Suggested search-result summary. Keep it specific and under 160 characters; the excerpt is used when this is blank.
+     */
+    metaDescription?: string | null;
+    /**
+     * The primary search phrase this content is intended to answer.
+     */
+    focusKeyword?: string | null;
+    /**
+     * Related search phrases, separated by commas.
+     */
+    secondaryKeywords?: string | null;
+  };
   /**
-   * Reader comments (demo/manual for now).
+   * Show this post in the homepage center column and scrolling alert bar.
    */
-  comments?:
-    | {
-        author: string;
-        date?: string | null;
-        text: string;
-        id?: string | null;
-      }[]
-    | null;
+  featured?: boolean | null;
+  /**
+   * Choose a side column for this post. Featured Post takes priority over this setting.
+   */
+  homepageColumn?: ('none' | 'left' | 'right') | null;
+  /**
+   * Lower numbers appear first within the selected side column.
+   */
+  homepageOrder?: number | null;
   /**
    * URL-friendly identifier. Auto-generated from the title if left blank.
    */
@@ -179,10 +194,6 @@ export interface Post {
    */
   relativeLabel?: string | null;
   readMinutes?: number | null;
-  /**
-   * Overrides the shown comment count if set.
-   */
-  commentCount?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -325,6 +336,35 @@ export interface Newsletter {
    */
   slug: string;
   description?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  seo?: {
+    /**
+     * Suggested search-result summary. Keep it specific and under 160 characters; the excerpt is used when this is blank.
+     */
+    metaDescription?: string | null;
+    /**
+     * The primary search phrase this content is intended to answer.
+     */
+    focusKeyword?: string | null;
+    /**
+     * Related search phrases, separated by commas.
+     */
+    secondaryKeywords?: string | null;
+  };
   /**
    * e.g. "Daily · 7 AM"
    */
@@ -460,14 +500,16 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   excerpt?: T;
   body?: T;
-  comments?:
+  seo?:
     | T
     | {
-        author?: T;
-        date?: T;
-        text?: T;
-        id?: T;
+        metaDescription?: T;
+        focusKeyword?: T;
+        secondaryKeywords?: T;
       };
+  featured?: T;
+  homepageColumn?: T;
+  homepageOrder?: T;
   slug?: T;
   date?: T;
   category?: T;
@@ -477,7 +519,6 @@ export interface PostsSelect<T extends boolean = true> {
   featuredImageCaption?: T;
   relativeLabel?: T;
   readMinutes?: T;
-  commentCount?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -543,6 +584,14 @@ export interface NewslettersSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   description?: T;
+  body?: T;
+  seo?:
+    | T
+    | {
+        metaDescription?: T;
+        focusKeyword?: T;
+        secondaryKeywords?: T;
+      };
   cadence?: T;
   updatedAt?: T;
   createdAt?: T;

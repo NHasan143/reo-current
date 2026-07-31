@@ -6,19 +6,17 @@
 // the same Next.js process), then map Payload documents onto the UI's domain
 // types (lib/types.ts). Editors manage all of this at /admin.
 //
-// Site "furniture" that isn't a blog entity yet (the breaking-alert strip, the
-// "Latest" wire, "Most Read", and the testimonial) still comes from
-// lib/mock-data.ts — these can graduate to a Payload global later.
+// Site "furniture" that isn't a blog entity yet (the "Latest" wire, "Most
+// Read", and the testimonial) still comes from lib/mock-data.ts — these can
+// graduate to a Payload global later.
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getPayload, type Payload } from "payload";
 import config from "@payload-config";
 import type {
-  Alert,
   Article,
   Author,
   Category,
-  LatestItem,
   MostReadItem,
   NavItem,
   Newsletter,
@@ -26,11 +24,8 @@ import type {
   Testimonial,
 } from "./types";
 import {
-  alert,
   footerSections,
-  homepageLeftSlugs,
   homepageSecondarySlugs,
-  latestWire,
   mostRead,
   testimonial,
 } from "./mock-data";
@@ -121,15 +116,12 @@ function mapPost(p: any): Article {
     readMinutes: p.readMinutes ?? undefined,
     featuredImageUrl: mediaUrl(p.featuredImage),
     featuredImageCaption: p.featuredImageCaption ?? undefined,
-    commentCount:
-      p.commentCount ?? (Array.isArray(p.comments) ? p.comments.length : undefined),
-    comments: Array.isArray(p.comments)
-      ? p.comments.map((c: any, i: number) => ({
-          id: String(c.id ?? i),
-          author: c.author,
-          date: c.date ?? "",
-          text: c.text,
-        }))
+    seo: p.seo
+      ? {
+          metaDescription: p.seo.metaDescription ?? undefined,
+          focusKeyword: p.seo.focusKeyword ?? undefined,
+          secondaryKeywords: p.seo.secondaryKeywords ?? undefined,
+        }
       : undefined,
   };
 }
@@ -167,16 +159,8 @@ export async function getFooterSections(): Promise<NavItem[]> {
   return footerSections;
 }
 
-export async function getAlert(): Promise<Alert | null> {
-  return alert;
-}
-
 export async function getMostRead(limit = 5): Promise<MostReadItem[]> {
   return mostRead.slice(0, limit);
-}
-
-export async function getLatestWire(limit = 5): Promise<LatestItem[]> {
-  return latestWire.slice(0, limit);
 }
 
 export async function getTestimonial(): Promise<Testimonial> {
@@ -197,6 +181,14 @@ export async function getNewsletters(): Promise<Newsletter[]> {
     name: n.name,
     description: n.description ?? "",
     cadence: n.cadence ?? "",
+    body: n.body ?? undefined,
+    seo: n.seo
+      ? {
+          metaDescription: n.seo.metaDescription ?? undefined,
+          focusKeyword: n.seo.focusKeyword ?? undefined,
+          secondaryKeywords: n.seo.secondaryKeywords ?? undefined,
+        }
+      : undefined,
   }));
 }
 
@@ -214,7 +206,19 @@ export async function getLatestArticles(limit?: number): Promise<Article[]> {
 }
 
 export async function getFeaturedArticle(): Promise<Article> {
+  const p = await payload();
+  const featured = await p.find({
+    collection: "posts",
+    where: { featured: { equals: true } },
+    sort: "-date",
+    limit: 1,
+    depth: 2,
+  });
+
+  if (featured.docs[0]) return mapPost(featured.docs[0]);
+
   const [latest] = await getLatestArticles(1);
+  if (!latest) throw new Error("No posts are available for the homepage feature.");
   return latest;
 }
 
@@ -262,11 +266,29 @@ export async function getArticlesBySlugs(slugs: string[]): Promise<Article[]> {
 }
 
 export async function getHomepageLeftStories(): Promise<Article[]> {
-  return getArticlesBySlugs(homepageLeftSlugs);
+  return getHomepageColumnStories("left");
+}
+
+export async function getHomepageRightStories(): Promise<Article[]> {
+  return getHomepageColumnStories("right");
 }
 
 export async function getHomepageSecondary(): Promise<Article[]> {
   return getArticlesBySlugs(homepageSecondarySlugs);
+}
+
+async function getHomepageColumnStories(
+  column: "left" | "right"
+): Promise<Article[]> {
+  const p = await payload();
+  const res = await p.find({
+    collection: "posts",
+    where: { homepageColumn: { equals: column } },
+    sort: ["homepageOrder", "-date"],
+    limit: 50,
+    depth: 2,
+  });
+  return res.docs.map(mapPost);
 }
 
 export async function getRelatedArticles(slug: string, limit = 3): Promise<Article[]> {

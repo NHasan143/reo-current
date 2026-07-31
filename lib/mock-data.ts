@@ -1,9 +1,7 @@
 import type {
-  Alert,
   Article,
   Author,
   Category,
-  LatestItem,
   MostReadItem,
   NavItem,
   Newsletter,
@@ -296,27 +294,6 @@ export const articles: Article[] = [
     readMinutes: 6,
     featuredImageCaption:
       "HUD headquarters in Washington, D.C. The final rule takes effect October 1. (REO Current)",
-    commentCount: 3,
-    comments: [
-      {
-        id: "c1",
-        author: "Carlos Mendez",
-        date: "July 17, 2026",
-        text: "The regional tiers are overdue. Disposal costs in metro markets have been eating our margins for years.",
-      },
-      {
-        id: "c2",
-        author: "Denise Park",
-        date: "July 17, 2026",
-        text: "75 days is tight to retrain crews and rebuild bid templates. Hoping the implementation guidance drops soon.",
-      },
-      {
-        id: "c3",
-        author: "Wire Staff",
-        date: "July 17, 2026",
-        text: "We'll publish a line-item comparison of the old and new schedules early next week.",
-      },
-    ],
   },
   {
     slug: "national-order-mill-vendor-exodus-60-day-payment-terms",
@@ -542,40 +519,6 @@ export const articles: Article[] = [
 // Homepage furniture
 // ---------------------------------------------------------------------------
 
-export const alert: Alert = {
-  label: "Alert",
-  text: "HUD updates P260 allowable pricing schedule for Q3 — vendors have 30 days to comply",
-  href: "/article/hud-finalizes-property-preservation-allowable-fee-schedule",
-};
-
-export const latestWire: LatestItem[] = [
-  {
-    time: "8:45 AM",
-    title: "Fannie Mae updates conveyance condition standards effective September 1",
-    href: "/category/foreclosure-reo",
-  },
-  {
-    time: "8:10 AM",
-    title: "Midwest grass-cut season extended amid record rainfall",
-    href: "/category/property-preservation",
-  },
-  {
-    time: "7:30 AM",
-    title: "VA issues clarification on winterization documentation requirements",
-    href: "/category/compliance-pricing",
-  },
-  {
-    time: "7:05 AM",
-    title: "REO inventory rises for third consecutive month",
-    href: "/category/foreclosure-reo",
-  },
-  {
-    time: "6:40 AM",
-    title: "New chargeback dispute portal launches for FHA properties",
-    href: "/category/compliance-pricing",
-  },
-];
-
 export const mostRead: MostReadItem[] = [
   {
     rank: 1,
@@ -648,12 +591,6 @@ export const popularTags: Tag[] = [
 // The lead grid groups stories semantically (not by date), so the left rail and
 // the two secondary cards under the lead are pinned explicitly — matching the
 // design source exactly.
-
-export const homepageLeftSlugs: string[] = [
-  "national-order-mill-vendor-exodus-60-day-payment-terms",
-  "occupancy-inspection-volumes-climb-delinquencies",
-  "gulf-coast-vendors-brace-hurricane-season-surge",
-];
 
 export const homepageSecondarySlugs: string[] = [
   "fha-extends-deadline-conveyance-photo-standards",

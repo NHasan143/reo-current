@@ -1,11 +1,19 @@
 import Link from "next/link";
-import type { LatestItem } from "@/lib/types";
+import type { Article } from "@/lib/types";
+
+function formatTime(date: string): string {
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "UTC",
+  }).format(new Date(date));
+}
 
 export function LatestWire({
-  items,
+  articles,
   heading = "Latest",
 }: {
-  items: LatestItem[];
+  articles: Article[];
   heading?: string;
 }) {
   return (
@@ -14,14 +22,17 @@ export function LatestWire({
         <span className="rule-label">{heading}</span>
       </div>
       <ul>
-        {items.map((item, i) => (
-          <li key={i} className="border-b border-line2">
-            <Link href={item.href} className="group flex items-baseline gap-2.5 py-3">
+        {articles.map((article) => (
+          <li key={article.slug} className="border-b border-line2">
+            <Link
+              href={`/article/${article.slug}`}
+              className="group flex items-baseline gap-2.5 py-3"
+            >
               <span className="shrink-0 whitespace-nowrap text-[11px] font-bold text-brand">
-                {item.time}
+                {formatTime(article.date)}
               </span>
               <span className="text-[14px] font-semibold leading-[1.4] text-ink group-hover:text-brand">
-                {item.title}
+                {article.title}
               </span>
             </Link>
           </li>
