@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { NavItem } from "@/lib/types";
 
 // The nav is CMS-driven and uncapped (all categories, limit 50), and the
@@ -30,10 +30,32 @@ export function MainNav({ navItems }: { navItems: NavItem[] }) {
 
   useLockedBody(open);
 
+  // Every dismissal returns focus to the trigger: whatever was focused inside
+  // the panel is about to unmount, and without this focus falls to <body> and
+  // the next Tab restarts from the top of the document.
+  const close = useCallback(() => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }, []);
+
   // Close on navigation — the drawer would otherwise survive a route change.
+  // Focus is left alone here; the destination page owns it.
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
+
+  // The drawer only exists below md. Crossing that boundary while open would
+  // otherwise leave `open` true — drawer mounted but CSS-hidden, body scroll
+  // still locked — and pop it back open on the way down.
+  useEffect(() => {
+    if (!open) return;
+    const mq = window.matchMedia("(min-width: 768px)");
+    const onChange = () => {
+      if (mq.matches) setOpen(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [open]);
 
   // Escape closes; Tab cycles within the panel while it is open.
   useEffect(() => {
@@ -41,8 +63,7 @@ export function MainNav({ navItems }: { navItems: NavItem[] }) {
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setOpen(false);
-        triggerRef.current?.focus();
+        close();
         return;
       }
       if (event.key !== "Tab" || !panelRef.current) return;
@@ -65,7 +86,7 @@ export function MainNav({ navItems }: { navItems: NavItem[] }) {
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [open]);
+  }, [open, close]);
 
   // Move focus into the panel when it opens.
   useEffect(() => {
@@ -121,11 +142,15 @@ export function MainNav({ navItems }: { navItems: NavItem[] }) {
       {/* Drawer */}
       {open && (
         <div className="fixed inset-0 z-50 md:hidden">
+          {/* Pointer-only convenience: hidden from the accessibility tree and
+              out of the tab order, so the close button below stays the single
+              labelled close control. Keyboard users close with Escape or it. */}
           <button
             type="button"
-            aria-label="Close sections menu"
-            onClick={() => setOpen(false)}
-            className="absolute inset-0 h-full w-full bg-ink/50"
+            aria-hidden
+            tabIndex={-1}
+            onClick={close}
+            className="absolute inset-0 bg-ink/50"
           />
           <div
             ref={panelRef}
@@ -141,10 +166,7 @@ export function MainNav({ navItems }: { navItems: NavItem[] }) {
               </span>
               <button
                 type="button"
-                onClick={() => {
-                  setOpen(false);
-                  triggerRef.current?.focus();
-                }}
+                onClick={close}
                 aria-label="Close sections menu"
                 className="-mr-2 flex h-11 w-11 items-center justify-center text-[20px] leading-none text-ink"
               >
