@@ -61,15 +61,7 @@ export interface Article {
   readMinutes?: number;
   featuredImageUrl?: string;
   featuredImageCaption?: string;
-  commentCount?: number;
-  comments?: Comment[];
-}
-
-export interface Comment {
-  id: string;
-  author: string;
-  date: string;
-  text: string;
+  seo?: SEOFields;
 }
 
 export interface Newsletter {
@@ -77,6 +69,16 @@ export interface Newsletter {
   name: string;
   description: string;
   cadence: string;
+  /** Rich-text newsletter body — a Payload/Lexical editor state. */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  body?: any;
+  seo?: SEOFields;
+}
+
+export interface SEOFields {
+  metaDescription?: string;
+  focusKeyword?: string;
+  secondaryKeywords?: string;
 }
 
 export interface NavItem {
@@ -92,20 +94,8 @@ export interface MostReadItem {
 }
 
 /** Item in the homepage "Latest" wire (timestamped). */
-export interface LatestItem {
-  time: string;
-  title: string;
-  href: string;
-}
-
 export interface Testimonial {
   quote: string;
   name: string;
   title: string;
-}
-
-export interface Alert {
-  label: string;
-  text: string;
-  href: string;
 }

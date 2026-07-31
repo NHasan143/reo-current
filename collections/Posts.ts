@@ -1,13 +1,41 @@
 import type { CollectionConfig } from "payload";
+import { seoFields } from "../fields/seo";
 import { slugField } from "../fields/slug";
 
 /** Blog posts / articles — the main content type editors manage. */
 export const Posts: CollectionConfig = {
   slug: "posts",
   access: { read: () => true },
+  hooks: {
+    afterChange: [
+      async ({ doc, req }) => {
+        if (!doc.featured) return;
+
+        // Keep a single center-column feature. Selecting a new post clears the
+        // previous selection without requiring an extra editor step.
+        await req.payload.update({
+          collection: "posts",
+          where: {
+            and: [
+              { id: { not_equals: doc.id } },
+              { featured: { equals: true } },
+            ],
+          },
+          data: { featured: false },
+          req,
+        });
+      },
+    ],
+  },
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "category", "author", "date"],
+    defaultColumns: [
+      "title",
+      "featured",
+      "homepageColumn",
+      "homepageOrder",
+      "date",
+    ],
     group: "Content",
   },
   fields: [
@@ -15,18 +43,52 @@ export const Posts: CollectionConfig = {
     { name: "title", type: "text", required: true },
     { name: "excerpt", type: "textarea", admin: { description: "Short summary shown on cards and as the article deck." } },
     { name: "body", type: "richText" },
-    {
-      name: "comments",
-      type: "array",
-      admin: { description: "Reader comments (demo/manual for now)." },
-      fields: [
-        { name: "author", type: "text", required: true },
-        { name: "date", type: "text" },
-        { name: "text", type: "textarea", required: true },
-      ],
-    },
+    seoFields(),
 
     // ---- Sidebar ----
+    {
+      name: "featured",
+      type: "checkbox",
+      label: "Featured Post",
+      defaultValue: false,
+      index: true,
+      admin: {
+        position: "sidebar",
+        description:
+          "Show this post in the homepage center column and scrolling alert bar.",
+      },
+    },
+    {
+      name: "homepageColumn",
+      type: "select",
+      label: "Homepage Side Column",
+      defaultValue: "none",
+      index: true,
+      options: [
+        { label: "Not Assigned", value: "none" },
+        { label: "Left Column", value: "left" },
+        { label: "Right Column (Latest)", value: "right" },
+      ],
+      admin: {
+        position: "sidebar",
+        description:
+          "Choose a side column for this post. Featured Post takes priority over this setting.",
+      },
+    },
+    {
+      name: "homepageOrder",
+      type: "number",
+      label: "Homepage Order",
+      defaultValue: 0,
+      min: 0,
+      admin: {
+        position: "sidebar",
+        description: "Lower numbers appear first within the selected side column.",
+        condition: (_, siblingData) =>
+          siblingData?.homepageColumn === "left" ||
+          siblingData?.homepageColumn === "right",
+      },
+    },
     slugField("title"),
     {
       name: "date",
@@ -64,6 +126,5 @@ export const Posts: CollectionConfig = {
       admin: { position: "sidebar", description: 'Optional relative label (e.g. "2 hours ago").' },
     },
     { name: "readMinutes", type: "number", admin: { position: "sidebar" } },
-    { name: "commentCount", type: "number", admin: { position: "sidebar", description: "Overrides the shown comment count if set." } },
   ],
 };

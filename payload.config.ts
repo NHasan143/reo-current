@@ -2,7 +2,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { buildConfig } from "payload";
 import { sqliteAdapter } from "@payloadcms/db-sqlite";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import {
+  EXPERIMENTAL_TableFeature,
+  FixedToolbarFeature,
+  lexicalEditor,
+} from "@payloadcms/richtext-lexical";
 import sharp from "sharp";
 
 import { Users } from "./collections/Users";
@@ -25,7 +29,13 @@ export default buildConfig({
     },
   },
   collections: [Posts, Categories, Tags, Authors, Newsletters, Media, Users],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures.filter(({ key }) => key !== "relationship"),
+      FixedToolbarFeature(),
+      EXPERIMENTAL_TableFeature(),
+    ],
+  }),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),

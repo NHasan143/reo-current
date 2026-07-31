@@ -1,0 +1,19 @@
+/* Match the CMS Body editor preview to published rich-text typography. */
+.rich-text-lexical .ContentEditable__root h1 {
+  font-size: 42px;
+}
+
+.rich-text-lexical .ContentEditable__root h2 {
+  font-size: 24px;
+}
+
+.rich-text-lexical .ContentEditable__root h3 {
+  font-size: 20px;
+}
+
+.rich-text-lexical .ContentEditable__root h4,
+.rich-text-lexical .ContentEditable__root h5,
+.rich-text-lexical .ContentEditable__root h6,
+.rich-text-lexical .ContentEditable__root p {
+  font-size: 18px;
+}

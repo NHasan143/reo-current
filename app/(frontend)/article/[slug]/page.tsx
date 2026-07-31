@@ -6,7 +6,6 @@ import { Avatar } from "@/components/ui/Avatar";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Photo } from "@/components/ui/Photo";
 import { ShareButtons } from "@/components/article/ShareButtons";
-import { CommentForm } from "@/components/forms/CommentForm";
 import { MorningWire } from "@/components/sidebar/MorningWire";
 import { MostRead } from "@/components/sidebar/MostRead";
 import {
@@ -29,12 +28,21 @@ export async function generateMetadata({
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
   if (!article) return { title: "Article not found" };
+  const description = article.seo?.metaDescription || article.excerpt;
+  const keywords = [
+    article.seo?.focusKeyword,
+    ...(article.seo?.secondaryKeywords?.split(",") ?? []),
+  ]
+    .map((keyword) => keyword?.trim())
+    .filter((keyword): keyword is string => Boolean(keyword));
+
   return {
     title: article.title,
-    description: article.excerpt,
+    description,
+    keywords: keywords.length ? keywords : undefined,
     openGraph: {
       title: article.title,
-      description: article.excerpt,
+      description,
       type: "article",
       authors: [article.author.name],
     },
@@ -127,7 +135,7 @@ export default async function ArticlePage({
 
           {/* Body */}
           {article.body && (
-            <div className="prose-article">
+            <div className="prose-content">
               <RichText data={article.body} />
             </div>
           )}
@@ -168,24 +176,6 @@ export default async function ArticlePage({
             </div>
           </div>
 
-          {/* Comments */}
-          <section>
-            <div className="rule-heading mb-5">
-              <span className="rule-label">
-                Comments ({article.commentCount ?? article.comments?.length ?? 0})
-              </span>
-            </div>
-            {article.comments?.map((c) => (
-              <div key={c.id} className="border-b border-line2 py-[18px]">
-                <div className="mb-2 flex items-baseline gap-3">
-                  <span className="text-[14px] font-bold text-ink">{c.author}</span>
-                  <span className="text-[12px] text-gray-400">{c.date}</span>
-                </div>
-                <p className="text-[15px] leading-[1.6] text-gray-700">{c.text}</p>
-              </div>
-            ))}
-            <CommentForm />
-          </section>
         </article>
 
         {/* Sidebar */}

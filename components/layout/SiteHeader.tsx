@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MainNav } from "@/components/layout/MainNav";
 import type { NavItem } from "@/lib/types";
@@ -5,14 +6,20 @@ import type { NavItem } from "@/lib/types";
 function Masthead() {
   return (
     <div className="border-b border-line">
-      <div className="container-page flex flex-wrap items-end justify-between gap-4 py-4 sm:py-5">
-        <Link href="/" className="block leading-none">
-          <span className="font-serif text-[32px] font-bold leading-none tracking-[-0.5px] text-ink sm:text-[40px]">
-            REO <span className="text-brand">Current</span>
-          </span>
-          <span className="mt-1.5 block text-[11px] uppercase tracking-[2.5px] text-gray-500">
-            Property Preservation &amp; Field Services News
-          </span>
+      <div className="container-page flex flex-wrap items-center justify-between gap-4 py-4 sm:py-5">
+        <Link
+          href="/"
+          aria-label="REO Current home"
+          className="relative block h-[45px] w-[118px] shrink-0 overflow-hidden sm:h-[51px] sm:w-[135px]"
+        >
+          <Image
+            src="/images/reo-current-logo.png"
+            alt="REO Current"
+            width={1024}
+            height={1024}
+            priority
+            className="absolute left-1/2 top-1/2 h-auto w-[162px] max-w-none -translate-x-1/2 -translate-y-1/2 sm:w-[190px]"
+          />
         </Link>
 
         <div className="flex w-full items-center gap-2.5 sm:w-auto">

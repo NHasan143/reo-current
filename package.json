@@ -5,7 +5,7 @@
   "type": "module",
   "description": "REO Current — Property Preservation & Field Services News. Next.js front-end backed by Payload CMS.",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

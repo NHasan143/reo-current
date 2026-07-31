@@ -11,13 +11,14 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Photo } from "@/components/ui/Photo";
 import { Byline } from "@/components/ui/Byline";
 import {
-  getAlert,
   getArticlesByCategory,
   getFeaturedArticle,
   getHomepageLeftStories,
+  getHomepageRightStories,
   getHomepageSecondary,
-  getLatestWire,
 } from "@/lib/data";
+
+export const dynamic = "force-dynamic";
 
 const HOMEPAGE_SECTIONS = [
   { slug: "property-preservation", title: "Property Preservation Services" },
@@ -27,33 +28,36 @@ const HOMEPAGE_SECTIONS = [
 ] as const;
 
 export default async function HomePage() {
-  const [alert, lead, railStories, secondary, latestWire] = await Promise.all([
-    getAlert(),
-    getFeaturedArticle(),
-    getHomepageLeftStories(),
-    getHomepageSecondary(),
-    getLatestWire(),
-  ]);
+  const [lead, pinnedRailStories, pinnedSecondary, pinnedRightStories] =
+    await Promise.all([
+      getFeaturedArticle(),
+      getHomepageLeftStories(),
+      getHomepageSecondary(),
+      getHomepageRightStories(),
+    ]);
 
-  // Stories already pinned above must not repeat inside the section blocks.
-  const used = new Set([
-    lead.slug,
-    ...railStories.map((a) => a.slug),
-    ...secondary.map((a) => a.slug),
-  ]);
+  // A featured post belongs only in the center lead position, even if it was
+  // previously pinned to one of the surrounding homepage slots.
+  const railStories = pinnedRailStories.filter(
+    (article) => article.slug !== lead.slug
+  );
+  const secondary = pinnedSecondary.filter(
+    (article) => article.slug !== lead.slug
+  );
+  const rightStories = pinnedRightStories.filter(
+    (article) => article.slug !== lead.slug
+  );
 
   const sections = await Promise.all(
     HOMEPAGE_SECTIONS.map(async (s) => ({
       ...s,
-      articles: (await getArticlesByCategory(s.slug))
-        .filter((a) => !used.has(a.slug))
-        .slice(0, 3),
+      articles: (await getArticlesByCategory(s.slug)).slice(0, 3),
     }))
   );
 
   return (
     <>
-      {alert && <AlertBar alert={alert} />}
+      <AlertBar article={lead} />
 
       <div className="container-page pb-14 pt-8">
         {/* Lead: 3-column newspaper grid with vertical dividers */}
@@ -106,7 +110,7 @@ export default async function HomePage() {
 
           {/* Right rail */}
           <aside className="lg:border-l lg:border-line lg:pl-6">
-            <LatestWire items={latestWire} />
+            <LatestWire articles={rightStories} />
             <div className="mt-6">
               <MorningWire description="Daily briefing on preservation, inspections, and REO — in your inbox by 7 AM." />
             </div>
