@@ -41,6 +41,7 @@ export function MiniSignup({
           <label className="sr-only" htmlFor={`mini-${title}`}>
             Email address
           </label>
+          {/* 16px below md stops iOS Safari zooming the viewport on focus. */}
           <input
             id={`mini-${title}`}
             type="email"
@@ -48,7 +49,7 @@ export function MiniSignup({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
-            className="mb-2.5 h-[38px] w-full bg-white px-3 text-[13px] text-ink outline-none"
+            className="mb-2.5 h-11 w-full bg-white px-3 text-[16px] text-ink outline-none md:h-[38px] md:text-[13px]"
           />
           <button
             type="submit"

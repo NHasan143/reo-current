@@ -51,6 +51,8 @@ export function NewsletterForm({ newsletters }: { newsletters: Newsletter[] }) {
         >
           Email address
         </label>
+        {/* 16px below md stops iOS Safari zooming the viewport on focus. The
+            h-12 height already clears the 44px touch minimum at every width. */}
         <input
           id="nl-email"
           type="email"
@@ -58,7 +60,7 @@ export function NewsletterForm({ newsletters }: { newsletters: Newsletter[] }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@company.com"
-          className="mb-[18px] h-12 w-full border border-stroke px-3.5 text-[14px] outline-none focus:outline-2 focus:outline-brand"
+          className="mb-[18px] h-12 w-full border border-stroke px-3.5 text-[16px] outline-none focus:outline-2 focus:outline-brand md:text-[14px]"
         />
 
         <div className="mb-2.5 text-[12px] font-bold uppercase tracking-[0.8px]">

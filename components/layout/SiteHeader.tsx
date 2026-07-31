@@ -23,18 +23,23 @@ function Masthead() {
         </Link>
 
         <div className="flex w-full items-center gap-2.5 sm:w-auto">
-          {/* Search — submits to /search on Enter. */}
+          {/* Search — submits to /search on Enter. 16px below md keeps iOS
+              Safari from zooming the viewport on focus; the design's 13px
+              returns once we're off touch widths. */}
           <form role="search" action="/search" className="flex-1 sm:flex-none">
             <input
               type="search"
               name="q"
               placeholder="Search news…"
               aria-label="Search news"
-              className="h-[38px] w-full border border-stroke px-3.5 text-[13px] outline-none focus:border-gray-500 sm:w-[200px]"
+              className="h-11 w-full border border-stroke px-3.5 text-[16px] outline-none focus:border-gray-500 sm:w-[200px] md:h-[38px] md:text-[13px]"
             />
           </form>
           {/* Subscribe — goes to the newsletters page. */}
-          <Link href="/newsletters" className="btn-brand h-[38px] whitespace-nowrap">
+          <Link
+            href="/newsletters"
+            className="btn-brand h-11 whitespace-nowrap md:h-[38px]"
+          >
             Subscribe
           </Link>
         </div>
