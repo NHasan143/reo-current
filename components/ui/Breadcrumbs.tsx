@@ -13,7 +13,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
         <Fragment key={i}>
           {i > 0 && <span className="mx-2 text-gray-300">/</span>}
           {item.href ? (
-            <Link href={item.href} className="hover:text-brand">
+            <Link href={item.href} className="hover:text-[#FD7402]">
               {item.label}
             </Link>
           ) : (

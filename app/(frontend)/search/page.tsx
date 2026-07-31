@@ -56,7 +56,7 @@ export default async function SearchPage({
             {query && results.length === 0 && (
               <p className="py-8 text-[15px] text-gray-600">
                 No articles matched your search. Try different keywords, or{" "}
-                <Link href="/" className="text-brand underline">
+                <Link href="/" className="text-[#FD7402] underline">
                   browse the homepage
                 </Link>
                 .

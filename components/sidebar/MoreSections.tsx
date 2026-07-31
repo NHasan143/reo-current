@@ -18,10 +18,10 @@ export function MoreSections({
           <Link
             key={cat.slug}
             href={`/category/${cat.slug}`}
-            className="flex items-center justify-between border-b border-line2 py-[11px] text-[14px] font-semibold text-ink hover:text-brand"
+            className="flex items-center justify-between border-b border-line2 py-[11px] text-[14px] font-semibold text-ink hover:text-[#FD7402]"
           >
             <span>{cat.name}</span>
-            <span aria-hidden="true" className="text-brand">
+            <span aria-hidden="true" className="text-[#FD7402]">
               →
             </span>
           </Link>

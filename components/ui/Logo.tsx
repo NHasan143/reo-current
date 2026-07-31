@@ -10,7 +10,7 @@ export function Logo({
   return (
     <Link href="/" className={`group inline-block leading-none ${className}`}>
       <span className="font-serif text-3xl font-bold tracking-tight text-ink">
-        REO<span className="text-brand"> Current</span>
+        REO<span className="text-[#FD7402]"> Current</span>
       </span>
       {withTagline && (
         <span className="mt-1 block font-sans text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-neutral-500">

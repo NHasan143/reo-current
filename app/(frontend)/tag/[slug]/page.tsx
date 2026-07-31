@@ -64,7 +64,7 @@ export default async function TagPage({
               { label: tag.name },
             ]}
           />
-          <div className="mt-3.5 text-[12px] font-bold uppercase tracking-[1.2px] text-brand">
+          <div className="mt-3.5 text-[12px] font-bold uppercase tracking-[1.2px] text-[#FD7402]">
             Tag
           </div>
           <h1 className="mb-2 mt-2 font-serif text-[36px] font-bold text-ink md:text-[44px]">
@@ -94,7 +94,7 @@ export default async function TagPage({
             <Link
               key={t.slug}
               href={`/tag/${t.slug}`}
-              className="border border-stroke px-3 py-[5px] text-[13px] font-semibold text-gray-600 hover:border-brand hover:text-brand"
+              className="border border-stroke px-3 py-[5px] text-[13px] font-semibold text-gray-600 hover:border-[#FD7402] hover:text-[#FD7402]"
             >
               #{t.name}
             </Link>

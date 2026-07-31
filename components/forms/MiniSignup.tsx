@@ -52,7 +52,7 @@ export function MiniSignup({
           />
           <button
             type="submit"
-            className="w-full bg-brand py-2.5 text-[13px] font-bold uppercase tracking-[1px] text-white transition-colors hover:bg-brand-dark"
+            className="w-full bg-[#FD7402] py-2.5 text-[13px] font-bold uppercase tracking-[1px] text-white transition-colors hover:bg-[#FD7402]"
           >
             {cta}
           </button>

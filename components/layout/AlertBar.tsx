@@ -9,14 +9,14 @@ export function AlertBar({
   return (
     <div className="border-b border-alertline bg-alertbg">
       <div className="container-page flex items-center gap-3.5 py-2.5 text-[13px]">
-        <span className="shrink-0 bg-brand px-2.5 py-[3px] text-[11px] font-extrabold uppercase tracking-[1px] text-white">
+        <span className="shrink-0 bg-[#FD7402] px-2.5 py-[3px] text-[11px] font-extrabold uppercase tracking-[1px] text-white">
           Featured
         </span>
         <div className="alert-ticker min-w-0 flex-1 overflow-hidden">
           <div className="alert-ticker-track">
             <Link
               href={`/article/${article.slug}`}
-              className="font-semibold text-ink hover:text-brand focus-visible:text-brand"
+              className="font-semibold text-ink hover:text-[#0E489C] focus-visible:text-[#0E489C]"
             >
               {article.title}
             </Link>
