@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* Hide the scrollbar on horizontally-scrollable strips (e.g. the nav) while
+     keeping them scrollable. Also suppresses the phantom vertical scrollbar
+     that overflow-x:auto triggers on Windows. */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer base {
+  /* --font-serif (Source Serif 4) and --font-sans (Libre Franklin) are
+     injected by next/font — see app/layout.tsx. */
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-white font-sans text-ink;
+    line-height: 1.6;
+  }
+
+  a {
+    @apply text-ink no-underline transition-colors;
+  }
+  a:hover {
+    @apply text-brand;
+  }
+
+  ::selection {
+    background-color: rgba(138, 28, 28, 0.15);
+  }
+}
+
+@layer components {
+  /* Page gutter — the design centres every band at 1280px with 24px padding. */
+  .container-page {
+    @apply mx-auto w-full max-w-[1280px] px-5 sm:px-6;
+  }
+
+  /* The recurring black-underline section label (Latest, Most Read, section
+     blocks, comments, related coverage, beats, popular tags). */
+  .rule-heading {
+    @apply flex items-baseline justify-between border-b-[3px] border-ink pb-1.5;
+  }
+  .rule-label {
+    @apply font-sans text-[13px] font-extrabold uppercase tracking-[1.5px] text-ink;
+  }
+
+  /* Red category / eyebrow label. */
+  .eyebrow {
+    @apply font-sans text-[11px] font-bold uppercase tracking-[1px] text-brand;
+  }
+
+  /* Image placeholder box. */
+  .photo-ph {
+    @apply flex items-center justify-center bg-photo text-[12px] uppercase tracking-[1px] text-[#a8a294];
+  }
+
+  /* Buttons. */
+  .btn-brand {
+    @apply inline-flex items-center justify-center bg-brand px-[18px] py-2.5 text-[13px] font-bold uppercase tracking-[0.5px] text-white transition-colors hover:bg-brand-dark;
+  }
+  .btn-dark {
+    @apply inline-flex items-center justify-center bg-ink px-[18px] py-2.5 text-[12px] font-bold uppercase tracking-[0.8px] text-white transition-colors hover:bg-ink-soft;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center border border-stroke bg-white px-3.5 py-[7px] text-[12px] font-semibold text-ink transition-colors hover:border-ink;
+  }
+
+  /* Article body prose — Source Serif, 18px / 1.85. */
+  .prose-article {
+    @apply font-serif text-[18px] text-[#1f2937];
+    line-height: 1.85;
+  }
+  .prose-article p {
+    @apply mb-6;
+  }
+  .prose-article h2 {
+    @apply mb-4 mt-2 font-serif text-[27px] font-bold leading-[1.25] text-ink;
+  }
+  .prose-article h3 {
+    @apply mb-3 mt-8 font-serif text-[22px] font-bold leading-snug text-ink;
+  }
+  .prose-article a {
+    @apply text-brand underline decoration-brand/30 underline-offset-2 hover:decoration-brand;
+  }
+  .prose-article ul {
+    @apply mb-6 list-disc space-y-2 pl-6;
+  }
+  .prose-article blockquote {
+    @apply my-2 mb-7 border-l-4 border-brand pl-6 font-serif text-[23px] italic leading-[1.4] text-ink;
+  }
+}
