@@ -99,7 +99,7 @@ export default async function CategoryPage({
                 </Link>
                 <span className="eyebrow">Top Story</span>
                 <h2 className="mb-2.5 mt-2 font-serif text-[30px] font-bold leading-[1.2] text-ink">
-                  <Link href={`/article/${topStory.slug}`} className="hover:text-brand">
+                  <Link href={`/article/${topStory.slug}`} className="hover:text-[#0E489C]">
                     {topStory.title}
                   </Link>
                 </h2>
@@ -110,7 +110,7 @@ export default async function CategoryPage({
                   By{" "}
                   <Link
                     href={`/author/${topStory.author.slug}`}
-                    className="font-semibold text-ink hover:text-brand"
+                    className="font-semibold text-ink hover:text-[#FD7402]"
                   >
                     {topStory.author.name}
                   </Link>{" "}

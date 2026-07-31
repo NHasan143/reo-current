@@ -23,7 +23,7 @@ export function Byline({
       {withBy && "By "}
       <Link
         href={`/author/${article.author.slug}`}
-        className="font-semibold text-ink hover:text-brand"
+        className="font-semibold text-ink hover:text-[#FD7402]"
       >
         {article.author.name}
       </Link>

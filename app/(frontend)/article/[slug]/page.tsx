@@ -81,7 +81,7 @@ export default async function ArticlePage({
 
           <Link
             href={`/category/${article.category.slug}`}
-            className="mt-4 block text-[12px] font-bold uppercase tracking-[1.2px] text-brand"
+            className="mt-4 block text-[12px] font-bold uppercase tracking-[1.2px] text-[#FD7402] hover:text-[#0E489C]"
           >
             {article.category.name}
           </Link>
@@ -104,7 +104,7 @@ export default async function ArticlePage({
               <div className="leading-tight">
                 <Link
                   href={`/author/${article.author.slug}`}
-                  className="text-[14px] font-bold text-ink hover:text-brand"
+                  className="text-[14px] font-bold text-ink hover:text-[#FD7402]"
                 >
                   {article.author.name}
                 </Link>
@@ -147,7 +147,7 @@ export default async function ArticlePage({
                 <Link
                   key={tag.slug}
                   href={`/tag/${tag.slug}`}
-                  className="border border-stroke px-3 py-[5px] text-[12px] font-semibold text-gray-600 transition-colors hover:border-brand hover:text-brand"
+                  className="border border-stroke px-3 py-[5px] text-[12px] font-semibold text-gray-600 transition-colors hover:border-[#FD7402] hover:text-[#FD7402]"
                 >
                   {tag.name}
                 </Link>
@@ -166,7 +166,7 @@ export default async function ArticlePage({
             <div>
               <Link
                 href={`/author/${article.author.slug}`}
-                className="text-[15px] font-bold text-ink hover:text-brand"
+                className="text-[15px] font-bold text-ink hover:text-[#FD7402]"
               >
                 {article.author.name}
               </Link>
@@ -201,7 +201,7 @@ export default async function ArticlePage({
                 <Link
                   key={rel.slug}
                   href={`/article/${rel.slug}`}
-                  className="block border border-line2 bg-white"
+                  className="group block border border-line2 bg-white"
                 >
                   <Photo
                     src={rel.featuredImageUrl}
@@ -209,10 +209,10 @@ export default async function ArticlePage({
                     className="aspect-[16/9] w-full"
                   />
                   <div className="p-[18px]">
-                    <div className="mb-2 text-[11px] font-bold uppercase tracking-[0.8px] text-brand">
+                    <div className="mb-2 text-[11px] font-bold uppercase tracking-[0.8px] text-[#FD7402] group-hover:text-[#0E489C]">
                       {rel.category.name}
                     </div>
-                    <h3 className="mb-2 font-serif text-[18px] font-bold leading-[1.3] text-ink">
+                    <h3 className="mb-2 font-serif text-[18px] font-bold leading-[1.3] text-ink group-hover:text-[#0E489C]">
                       {rel.title}
                     </h3>
                     <div className="text-[12px] text-gray-500">

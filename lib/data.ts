@@ -143,15 +143,45 @@ async function findOneBySlug(collection: any, slug: string): Promise<any | null>
 
 export async function getPrimaryNav(): Promise<NavItem[]> {
   const p = await payload();
-  const res = await p.find({
-    collection: "categories",
-    limit: 50,
-    sort: "order",
-    depth: 0,
-  });
-  return res.docs.map((c: any) => ({
-    label: c.name,
-    href: `/category/${c.slug}`,
+  const [categories, posts] = await Promise.all([
+    p.find({
+      collection: "categories",
+      limit: 50,
+      sort: "order",
+      depth: 0,
+    }),
+    p.find({
+      collection: "posts",
+      limit: 200,
+      sort: "-date",
+      depth: 1,
+    }),
+  ]);
+
+  const recentByCategory = new Map<string, NavItem["recentPosts"]>();
+
+  for (const post of posts.docs as any[]) {
+    const categoryID =
+      typeof post.category === "object" ? post.category?.id : post.category;
+    if (categoryID == null) continue;
+
+    const key = String(categoryID);
+    const recent = recentByCategory.get(key) ?? [];
+    if (recent.length >= 4) continue;
+
+    recent.push({
+      slug: post.slug,
+      title: post.title,
+      displayDate: fmtDate(post.date),
+      featuredImageUrl: mediaUrl(post.featuredImage),
+    });
+    recentByCategory.set(key, recent);
+  }
+
+  return categories.docs.map((category: any) => ({
+    label: category.name,
+    href: `/category/${category.slug}`,
+    recentPosts: recentByCategory.get(String(category.id)) ?? [],
   }));
 }
 

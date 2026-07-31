@@ -58,7 +58,7 @@ export function NewsletterForm({ newsletters }: { newsletters: Newsletter[] }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@company.com"
-          className="mb-[18px] h-12 w-full border border-stroke px-3.5 text-[14px] outline-none focus:outline-2 focus:outline-brand"
+          className="mb-[18px] h-12 w-full border border-stroke px-3.5 text-[14px] outline-none focus:outline-2 focus:outline-[#FD7402]"
         />
 
         <div className="mb-2.5 text-[12px] font-bold uppercase tracking-[0.8px]">
@@ -73,12 +73,12 @@ export function NewsletterForm({ newsletters }: { newsletters: Newsletter[] }) {
                   type="button"
                   onClick={() => toggle(nl.slug)}
                   className={`flex w-full items-start gap-3 border p-3 text-left transition-colors ${
-                    on ? "border-brand bg-[#fbf4f4]" : "border-[#e0e2e7] bg-white"
+                    on ? "border-[#FD7402] bg-[#fbf4f4]" : "border-[#e0e2e7] bg-white"
                   }`}
                 >
                   <span
                     className={`mt-px flex h-5 w-5 shrink-0 items-center justify-center border-2 text-[13px] text-white ${
-                      on ? "border-brand bg-brand" : "border-stroke bg-white"
+                      on ? "border-[#FD7402] bg-[#FD7402]" : "border-stroke bg-white"
                     }`}
                   >
                     {on ? "✓" : ""}
@@ -99,7 +99,7 @@ export function NewsletterForm({ newsletters }: { newsletters: Newsletter[] }) {
 
         <button
           type="submit"
-          className="mt-2 w-full bg-brand py-[13px] text-[14px] font-bold uppercase tracking-[1px] text-white transition-colors hover:bg-brand-dark"
+          className="mt-2 w-full bg-[#FD7402] py-[13px] text-[14px] font-bold uppercase tracking-[1px] text-white transition-colors hover:bg-[#FD7402]"
         >
           Subscribe Free
         </button>

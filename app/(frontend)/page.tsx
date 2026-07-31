@@ -83,12 +83,12 @@ export default async function HomePage() {
               </Link>
               <Link
                 href={`/category/${lead.category.slug}`}
-                className="text-[12px] font-bold uppercase tracking-[1px] text-brand"
+                className="text-[12px] font-bold uppercase tracking-[1px] text-[#FD7402] hover:text-[#0E489C]"
               >
                 {lead.category.name}
               </Link>
               <h1 className="mb-3.5 mt-2.5 font-serif text-[32px] font-bold leading-[1.15] text-ink md:text-[36px]">
-                <Link href={`/article/${lead.slug}`} className="hover:text-brand">
+                <Link href={`/article/${lead.slug}`} className="hover:text-[#0E489C]">
                   {lead.title}
                 </Link>
               </h1>
@@ -124,6 +124,7 @@ export default async function HomePage() {
               <SectionHeading
                 title={section.title}
                 href={`/category/${section.slug}`}
+                titleClassName="text-[#0E489C]"
               />
               <div className="mt-1">
                 {section.articles.map((article) => (

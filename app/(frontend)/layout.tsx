@@ -6,6 +6,8 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { getPrimaryNav } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 const serif = Source_Serif_4({
   subsets: ["latin"],
   weight: ["400", "600", "700"],

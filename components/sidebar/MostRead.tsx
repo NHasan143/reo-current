@@ -18,7 +18,7 @@ export function MostRead({ items }: { items: MostReadItem[] }) {
             </span>
             <Link
               href={item.href}
-              className="text-[14px] font-semibold leading-[1.4] text-ink hover:text-brand"
+              className="text-[14px] font-semibold leading-[1.4] text-ink hover:text-[#0E489C]"
             >
               {item.title}
             </Link>

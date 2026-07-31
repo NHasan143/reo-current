@@ -32,11 +32,11 @@
     @apply text-ink no-underline transition-colors;
   }
   a:hover {
-    @apply text-brand;
+    color: #fd7402;
   }
 
   ::selection {
-    background-color: rgba(138, 28, 28, 0.15);
+    background-color: rgba(253, 116, 2, 0.15);
   }
 }
 
@@ -55,9 +55,13 @@
     @apply font-sans text-[13px] font-extrabold uppercase tracking-[1.5px] text-ink;
   }
 
-  /* Red category / eyebrow label. */
+  /* Orange category / eyebrow label. */
   .eyebrow {
-    @apply font-sans text-[11px] font-bold uppercase tracking-[1px] text-brand;
+    @apply font-sans text-[11px] font-bold uppercase tracking-[1px];
+    color: #fd7402;
+  }
+  .eyebrow:hover {
+    color: #0e489c;
   }
 
   /* Image placeholder box. */
@@ -67,7 +71,11 @@
 
   /* Buttons. */
   .btn-brand {
-    @apply inline-flex items-center justify-center bg-brand px-[18px] py-2.5 text-[13px] font-bold uppercase tracking-[0.5px] text-white transition-colors hover:bg-brand-dark;
+    @apply inline-flex items-center justify-center px-[18px] py-2.5 text-[13px] font-bold uppercase tracking-[0.5px] text-white transition-colors;
+    background-color: #fd7402;
+  }
+  .btn-brand:hover {
+    background-color: #fd7402;
   }
   .btn-dark {
     @apply inline-flex items-center justify-center bg-ink px-[18px] py-2.5 text-[12px] font-bold uppercase tracking-[0.8px] text-white transition-colors hover:bg-ink-soft;
@@ -114,13 +122,20 @@
     @apply mb-3 mt-7 font-serif text-[18px] font-bold leading-[1.35] text-ink;
   }
   .prose-content a {
-    @apply text-brand underline decoration-brand/30 underline-offset-2 hover:decoration-brand;
+    @apply underline underline-offset-2;
+    color: #fd7402;
+    text-decoration-color: rgba(253, 116, 2, 0.3);
+  }
+  .prose-content a:hover {
+    color: #fd7402;
+    text-decoration-color: #fd7402;
   }
   .prose-content ul {
     @apply mb-6 list-disc space-y-2 pl-6;
   }
   .prose-content blockquote {
-    @apply my-2 mb-7 border-l-4 border-brand pl-6 font-serif text-[23px] italic leading-[1.4] text-ink;
+    @apply my-2 mb-7 border-l-4 pl-6 font-serif text-[23px] italic leading-[1.4] text-ink;
+    border-left-color: #fd7402;
   }
   .prose-content .lexical-table-container {
     @apply mb-7 max-w-full overflow-x-auto;
