@@ -18,7 +18,7 @@ export function SectionHeading({
       {href && (
         <Link
           href={href}
-          className="text-[12px] font-semibold text-brand hover:text-brand-dark"
+          className="touch-target inline-flex items-center text-[12px] font-semibold text-brand hover:text-brand-dark"
         >
           {linkLabel} <span aria-hidden="true">→</span>
         </Link>

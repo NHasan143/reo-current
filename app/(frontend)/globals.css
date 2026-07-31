@@ -65,15 +65,22 @@
     @apply flex items-center justify-center bg-photo text-[12px] uppercase tracking-[1px] text-[#a8a294];
   }
 
+  /* Interactive controls hold a 44px touch row below lg, then return to the
+     design's tighter desktop sizing. Pair with a flex/inline-flex display at
+     the call site; add min-w-[44px] where the label is narrow too. */
+  .touch-target {
+    @apply min-h-[44px] lg:min-h-[unset];
+  }
+
   /* Buttons. */
   .btn-brand {
-    @apply inline-flex items-center justify-center bg-brand px-[18px] py-2.5 text-[13px] font-bold uppercase tracking-[0.5px] text-white transition-colors hover:bg-brand-dark;
+    @apply inline-flex min-h-[44px] items-center justify-center bg-brand px-[18px] py-2.5 text-[13px] font-bold uppercase tracking-[0.5px] text-white transition-colors hover:bg-brand-dark lg:min-h-[unset];
   }
   .btn-dark {
-    @apply inline-flex items-center justify-center bg-ink px-[18px] py-2.5 text-[12px] font-bold uppercase tracking-[0.8px] text-white transition-colors hover:bg-ink-soft;
+    @apply inline-flex min-h-[44px] items-center justify-center bg-ink px-[18px] py-2.5 text-[12px] font-bold uppercase tracking-[0.8px] text-white transition-colors hover:bg-ink-soft lg:min-h-[unset];
   }
   .btn-outline {
-    @apply inline-flex items-center justify-center border border-stroke bg-white px-3.5 py-[7px] text-[12px] font-semibold text-ink transition-colors hover:border-ink;
+    @apply inline-flex min-h-[44px] items-center justify-center border border-stroke bg-white px-3.5 py-[7px] text-[12px] font-semibold text-ink transition-colors hover:border-ink lg:min-h-[unset];
   }
 
   /* Scroll the breaking-news headline at a calm pace while keeping its label fixed. */

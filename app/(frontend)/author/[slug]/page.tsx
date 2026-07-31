@@ -32,7 +32,7 @@ export async function generateMetadata({
 }
 
 const SOCIAL =
-  "inline-flex items-center justify-center border border-stroke bg-white px-3.5 py-[9px] text-[13px] font-semibold text-ink transition-colors hover:border-ink";
+  "touch-target inline-flex items-center justify-center border border-stroke bg-white px-3.5 py-[9px] text-[13px] font-semibold text-ink transition-colors hover:border-ink";
 
 // Small so pagination is demonstrable with the current seed data; bump this
 // once authors have more posts.
@@ -193,7 +193,7 @@ export default async function AuthorPage({
                   {beats.map((b) => (
                     <span
                       key={b}
-                      className="border border-stroke px-3 py-[5px] text-[13px] font-semibold text-gray-600"
+                      className="touch-target inline-flex items-center border border-stroke px-3 py-[5px] text-[13px] font-semibold text-gray-600"
                     >
                       {b}
                     </span>

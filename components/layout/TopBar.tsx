@@ -9,10 +9,17 @@ function formatToday(): string {
   }).format(new Date());
 }
 
+// The links' own touch rows set the bar's height below lg, so the container's
+// padding would only stack on top of them; both return at lg.
+const UTILITY_LINK = "touch-target flex items-center";
+
 export function TopBar() {
   return (
     <div className="bg-ink text-utility">
-      <div className="container-page flex items-center py-1.5 text-[12px]">
+      {/* The links' own 44px rows set the bar's height below lg, so the
+          padding would only stack on top of them; it returns with the tighter
+          desktop strip. */}
+      <div className="container-page flex items-center text-[12px] lg:py-1.5">
         {/* The three utility links hold ~220px at their current gap, so at 320
             the date is left under 50px of a 280px line — short of even
             "8/1/26" (50px). Rather than cramp the links or wrap the bar onto
@@ -28,15 +35,15 @@ export function TopBar() {
         <nav className="ml-auto flex items-center gap-5">
           {/* Opens the latest-news feed (per request). Rename to "Latest" if
               you'd prefer the label to match the destination. */}
-          <Link href="/latest" className="text-utility hover:text-white">
+          <Link href="/latest" className={`${UTILITY_LINK} text-utility hover:text-white`}>
             Newsletters
           </Link>
-          <Link href="/advertise" className="text-utility hover:text-white">
+          <Link href="/advertise" className={`${UTILITY_LINK} text-utility hover:text-white`}>
             Advertise
           </Link>
           <Link
             href="/newsletters"
-            className="font-semibold text-white hover:text-white"
+            className={`${UTILITY_LINK} font-semibold text-white hover:text-white`}
           >
             Subscribe
           </Link>

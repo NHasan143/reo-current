@@ -30,9 +30,16 @@ function FooterColumn({
       <div className="mb-3 text-[12px] font-bold uppercase tracking-[1.5px] text-white">
         {title}
       </div>
-      <div className="flex flex-col gap-2 text-[13px]">
+      {/* Each link fills a 44px touch row below lg. A small gap stays so
+          adjacent targets aren't flush — WCAG 2.5.8 wants separation between
+          them — widening to the design's spacing on desktop. */}
+      <div className="flex flex-col gap-1 text-[13px] lg:gap-2">
         {items.map((item) => (
-          <Link key={item.href} href={item.href} className="text-utility hover:text-white">
+          <Link
+            key={item.href}
+            href={item.href}
+            className="touch-target flex items-center text-utility hover:text-white"
+          >
             {item.label}
           </Link>
         ))}

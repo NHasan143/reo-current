@@ -41,7 +41,8 @@ export function MiniSignup({
           <label className="sr-only" htmlFor={`mini-${title}`}>
             Email address
           </label>
-          {/* 16px below md stops iOS Safari zooming the viewport on focus. */}
+          {/* 16px holds to md (where iOS Safari stops zooming on focus); the
+              44px height holds to lg, since tablets are still touch. */}
           <input
             id={`mini-${title}`}
             type="email"
@@ -49,11 +50,11 @@ export function MiniSignup({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
-            className="mb-2.5 h-11 w-full bg-white px-3 text-[16px] text-ink outline-none md:h-[38px] md:text-[13px]"
+            className="mb-2.5 h-11 w-full bg-white px-3 text-[16px] text-ink outline-none md:text-[13px] lg:h-[38px]"
           />
           <button
             type="submit"
-            className="w-full bg-brand py-2.5 text-[13px] font-bold uppercase tracking-[1px] text-white transition-colors hover:bg-brand-dark"
+            className="flex min-h-[44px] w-full items-center justify-center bg-brand py-2.5 text-[13px] font-bold uppercase tracking-[1px] text-white transition-colors hover:bg-brand-dark lg:min-h-0"
           >
             {cta}
           </button>

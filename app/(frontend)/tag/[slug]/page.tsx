@@ -94,7 +94,7 @@ export default async function TagPage({
             <Link
               key={t.slug}
               href={`/tag/${t.slug}`}
-              className="border border-stroke px-3 py-[5px] text-[13px] font-semibold text-gray-600 hover:border-brand hover:text-brand"
+              className="touch-target inline-flex items-center border border-stroke px-3 py-[5px] text-[13px] font-semibold text-gray-600 hover:border-brand hover:text-brand"
             >
               #{t.name}
             </Link>
