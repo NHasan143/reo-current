@@ -60,24 +60,25 @@ export default async function HomePage() {
       <AlertBar article={lead} />
 
       <div className="container-page pb-14 pt-8">
-        {/* Lead: 3-column newspaper grid with vertical dividers */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_2fr_1fr] lg:gap-0">
-          {/* Left rail */}
-          <div className="flex flex-col lg:border-r lg:border-line lg:pr-6">
-            {railStories.map((article) => (
-              <StoryCompact key={article.slug} article={article} />
-            ))}
-          </div>
+        {/*
+          Source order is priority order — lead, then rail, then aside — so that
+          phones, screen readers, and tab order all reach the lead story first.
+          Desktop's newspaper arrangement is restored with explicit grid
+          placement rather than by reordering the markup.
 
-          {/* Center lead */}
-          <div className="lg:px-7">
+          Tiers: one column below 768; main + right rail from 768; the full
+          three-column grid at 1280, the width it was drawn for.
+        */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_260px] md:gap-x-8 md:gap-y-10 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[1fr_2fr_1fr] xl:gap-0">
+          {/* Lead */}
+          <div className="md:col-start-1 md:row-start-1 xl:col-start-2 xl:row-start-1 xl:px-7">
             <article>
               <Link href={`/article/${lead.slug}`}>
                 <Photo
                   src={lead.featuredImageUrl}
                   label="Lead Photo"
                   priority
-                  sizes="(min-width: 1024px) 620px, 100vw"
+                  sizes="(min-width: 1280px) 620px, (min-width: 768px) 60vw, 100vw"
                   className="mb-[18px] aspect-[16/9] w-full"
                 />
               </Link>
@@ -87,7 +88,10 @@ export default async function HomePage() {
               >
                 {lead.category.name}
               </Link>
-              <h1 className="mb-3.5 mt-2.5 font-serif text-[32px] font-bold leading-[1.15] text-ink md:text-[36px]">
+              {/* Holds at 32px through the tablet tier — the main column is
+                  narrower there than a phone's full width — and only steps up
+                  once the three-column grid gives it room. */}
+              <h1 className="mb-3.5 mt-2.5 font-serif text-[32px] font-bold leading-[1.15] text-ink xl:text-[36px]">
                 <Link href={`/article/${lead.slug}`} className="hover:text-brand">
                   {lead.title}
                 </Link>
@@ -108,8 +112,15 @@ export default async function HomePage() {
             )}
           </div>
 
-          {/* Right rail */}
-          <aside className="lg:border-l lg:border-line lg:pl-6">
+          {/* Rail stories — beneath the lead at tablet, the left column at xl */}
+          <div className="flex flex-col md:col-start-1 md:row-start-2 xl:col-start-1 xl:row-start-1 xl:row-span-1 xl:border-r xl:border-line xl:pr-6">
+            {railStories.map((article) => (
+              <StoryCompact key={article.slug} article={article} />
+            ))}
+          </div>
+
+          {/* Right rail — spans both rows at tablet, its own column at xl */}
+          <aside className="md:col-start-2 md:row-start-1 md:row-span-2 md:border-l md:border-line md:pl-6 xl:col-start-3 xl:row-span-1 xl:border-l xl:pl-6">
             <LatestWire articles={rightStories} />
             <div className="mt-6">
               <MorningWire description="Daily briefing on preservation, inspections, and REO — in your inbox by 7 AM." />
