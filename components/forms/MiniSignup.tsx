@@ -28,7 +28,10 @@ export function MiniSignup({
   return (
     <div className="bg-ink px-5 py-6 text-white">
       <div className="font-serif text-[20px] font-bold">{title}</div>
-      <p className="mb-3.5 mt-2 text-[13px] leading-[1.5] text-utility">
+      {/* One of two running-text blurbs that sat at 13px; lifted a step on
+          phones for legibility. Labels and secondary text elsewhere stay at
+          13px by design. */}
+      <p className="mb-3.5 mt-2 text-[14px] leading-[1.5] text-utility sm:text-[13px]">
         {description}
       </p>
 

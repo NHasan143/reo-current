@@ -109,11 +109,17 @@
   .prose-content h1 {
     @apply mb-5 mt-10 font-serif text-[42px] font-bold leading-[1.15] text-ink;
   }
+  /* At 320 the prose column is 280px, where 24px broke a short heading across
+     four lines (~12 characters each). Stepping down on phones restores a
+     readable measure; the design's size returns once the column widens. */
   .prose-content h2 {
-    @apply mb-4 mt-9 font-serif text-[24px] font-bold leading-[1.25] text-ink;
+    @apply mb-4 mt-9 font-serif text-[20px] font-bold leading-[1.25] text-ink sm:text-[24px];
   }
+  /* Steps with h2 so the two levels stay distinct on phones. The scale is
+     squeezed here: h4-h6 and the body are both 18px, so h3 can't go lower
+     without a heading reading smaller than the text it introduces. */
   .prose-content h3 {
-    @apply mb-3 mt-8 font-serif text-[20px] font-bold leading-[1.3] text-ink;
+    @apply mb-3 mt-8 font-serif text-[19px] font-bold leading-[1.3] text-ink sm:text-[20px];
   }
   .prose-content h4,
   .prose-content h5,
@@ -126,8 +132,11 @@
   .prose-content ul {
     @apply mb-6 list-disc space-y-2 pl-6;
   }
+  /* Same reason as h2: 23px italic ran ~20 characters per line at 320, once
+     the 28px of left border and padding (border-l-4 + pl-6) come off the
+     column. Recovers at sm, where the column clears ~600px. */
   .prose-content blockquote {
-    @apply my-2 mb-7 border-l-4 border-brand pl-6 font-serif text-[23px] italic leading-[1.4] text-ink;
+    @apply my-2 mb-7 border-l-4 border-brand pl-6 font-serif text-[19px] italic leading-[1.4] text-ink sm:text-[23px];
   }
   .prose-content .lexical-table-container {
     @apply mb-7 max-w-full overflow-x-auto;

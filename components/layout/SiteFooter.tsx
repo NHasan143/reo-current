@@ -56,7 +56,9 @@ export function SiteFooter() {
           <div className="font-serif text-[26px] font-bold text-white">
             REO <span className="text-brand-light">Current</span>
           </div>
-          <p className="mt-2.5 max-w-xs text-[13px] leading-relaxed">
+          {/* The other 13px running-text blurb — lifted on phones to match
+              the Morning Wire description. */}
+          <p className="mt-2.5 max-w-xs text-[14px] leading-relaxed sm:text-[13px]">
             Independent reporting on property preservation, field services,
             inspections, and default servicing.
           </p>
