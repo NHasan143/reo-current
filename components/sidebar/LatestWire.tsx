@@ -16,6 +16,11 @@ export function LatestWire({
   articles: Article[];
   heading?: string;
 }) {
+  // A rule-heading with nothing under it reads as a broken section. The right
+  // rail is editor-driven (posts opt in via homepageColumn), so an empty list
+  // is a normal state, not an error.
+  if (articles.length === 0) return null;
+
   return (
     <section>
       <div className="rule-heading mb-1">

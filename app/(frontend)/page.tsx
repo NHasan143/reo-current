@@ -121,28 +121,36 @@ export default async function HomePage() {
 
           {/* Right rail — spans both rows at tablet, its own column at xl */}
           <aside className="md:col-start-2 md:row-start-1 md:row-span-2 md:border-l md:border-line md:pl-6 xl:col-start-3 xl:row-span-1 xl:border-l xl:pl-6">
-            <LatestWire articles={rightStories} />
-            <div className="mt-6">
-              <MorningWire description="Daily briefing on preservation, inspections, and REO — in your inbox by 7 AM." />
-            </div>
+            {/* No posts assigned to the right column is a legitimate editor
+                state, and the spacing has to go with the section. */}
+            {rightStories.length > 0 && (
+              <div className="mb-6">
+                <LatestWire articles={rightStories} />
+              </div>
+            )}
+            <MorningWire description="Daily briefing on preservation, inspections, and REO — in your inbox by 7 AM." />
           </aside>
         </div>
 
         {/* Section blocks */}
         <div className="mt-12 grid grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2">
-          {sections.map((section) => (
-            <section key={section.slug}>
-              <SectionHeading
-                title={section.title}
-                href={`/category/${section.slug}`}
-              />
-              <div className="mt-1">
-                {section.articles.map((article) => (
-                  <StoryRow key={article.slug} article={article} />
-                ))}
-              </div>
-            </section>
-          ))}
+          {/* A category with nothing published would otherwise render its rule
+              heading over an empty block. */}
+          {sections
+            .filter((section) => section.articles.length > 0)
+            .map((section) => (
+              <section key={section.slug}>
+                <SectionHeading
+                  title={section.title}
+                  href={`/category/${section.slug}`}
+                />
+                <div className="mt-1">
+                  {section.articles.map((article) => (
+                    <StoryRow key={article.slug} article={article} />
+                  ))}
+                </div>
+              </section>
+            ))}
         </div>
       </div>
     </>
