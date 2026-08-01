@@ -37,3 +37,10 @@ next-env.d.ts
 *.db-wal
 /media
 
+# agent tooling & working notes — local only, not needed to build or run the app
+/.agents/
+/.claude/
+/.scratch/
+/docs/
+/skills-lock.json
+
