@@ -43,4 +43,5 @@ next-env.d.ts
 /.scratch/
 /docs/
 /skills-lock.json
+/CLAUDE.md
 
