@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { seoFields } from "../fields/seo";
 import { slugField } from "../fields/slug";
+import { allCategorySubcategories } from "../lib/category-config";
 
 /** Blog posts / articles — the main content type editors manage. */
 export const Posts: CollectionConfig = {
@@ -32,8 +33,6 @@ export const Posts: CollectionConfig = {
     defaultColumns: [
       "title",
       "featured",
-      "homepageColumn",
-      "homepageOrder",
       "date",
     ],
     group: "Content",
@@ -58,37 +57,6 @@ export const Posts: CollectionConfig = {
           "Show this post in the homepage center column and scrolling alert bar.",
       },
     },
-    {
-      name: "homepageColumn",
-      type: "select",
-      label: "Homepage Side Column",
-      defaultValue: "none",
-      index: true,
-      options: [
-        { label: "Not Assigned", value: "none" },
-        { label: "Left Column", value: "left" },
-        { label: "Right Column (Latest)", value: "right" },
-      ],
-      admin: {
-        position: "sidebar",
-        description:
-          "Choose a side column for this post. Featured Post takes priority over this setting.",
-      },
-    },
-    {
-      name: "homepageOrder",
-      type: "number",
-      label: "Homepage Order",
-      defaultValue: 0,
-      min: 0,
-      admin: {
-        position: "sidebar",
-        description: "Lower numbers appear first within the selected side column.",
-        condition: (_, siblingData) =>
-          siblingData?.homepageColumn === "left" ||
-          siblingData?.homepageColumn === "right",
-      },
-    },
     slugField("title"),
     {
       name: "date",
@@ -103,6 +71,23 @@ export const Posts: CollectionConfig = {
       relationTo: "categories",
       required: true,
       admin: { position: "sidebar" },
+    },
+    {
+      name: "subcategory",
+      type: "select",
+      label: "Subcategory",
+      index: true,
+      options: allCategorySubcategories.map(
+        ({ label, slug, parentLabel }) => ({
+          label: `${parentLabel} — ${label}`,
+          value: slug,
+        })
+      ),
+      admin: {
+        position: "sidebar",
+        description:
+          "Optional. Select a child category that belongs to the chosen main category.",
+      },
     },
     {
       name: "author",

@@ -50,6 +50,7 @@ export interface Article {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
   category: Category;
+  subcategory?: string;
   tags: Tag[];
   author: Author;
   /** ISO date string. */
@@ -84,7 +85,13 @@ export interface SEOFields {
 export interface NavItem {
   label: string;
   href: string;
+  children?: NavChildItem[];
   recentPosts?: NavPost[];
+}
+
+export interface NavChildItem {
+  label: string;
+  href: string;
 }
 
 export interface NavPost {

@@ -198,8 +198,34 @@ export function MainNav({ navItems }: { navItems: NavItem[] }) {
               </Link>
             </div>
 
-            {openItem.recentPosts?.length ? (
-              <div className="grid grid-cols-4 gap-6">
+            <div
+              className={
+                openItem.children?.length
+                  ? "grid grid-cols-[220px_1fr] gap-8"
+                  : undefined
+              }
+            >
+              {openItem.children?.length ? (
+                <div className="border-r border-line pr-7">
+                  <div className="flex flex-col">
+                    {openItem.children.map((child) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        onClick={() => setOpenHref(null)}
+                        className="border-b border-line py-2.5 text-[14px] font-bold text-ink transition-colors last:border-b-0 hover:text-[#0E489C]"
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              {openItem.recentPosts?.length ? (
+                <div
+                  className="grid grid-cols-3 gap-6"
+                >
                 {openItem.recentPosts.map((post) => (
                   <Link
                     key={post.slug}
@@ -230,12 +256,13 @@ export function MainNav({ navItems }: { navItems: NavItem[] }) {
                     </div>
                   </Link>
                 ))}
-              </div>
-            ) : (
-              <p className="py-3 text-[14px] text-gray-500">
-                No posts have been published in this category yet.
-              </p>
-            )}
+                </div>
+              ) : (
+                <p className="py-3 text-[14px] text-gray-500">
+                  No posts have been published in this category yet.
+                </p>
+              )}
+            </div>
           </div>
         </div>
       )}

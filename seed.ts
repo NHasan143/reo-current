@@ -98,21 +98,6 @@ const ADMIN_EMAIL = "admin@reocurrent.com";
 const ADMIN_PASSWORD = "changeme123";
 const LEAD = "hud-finalizes-property-preservation-allowable-fee-schedule";
 
-// Which posts the homepage pins either side of the lead. The right column
-// feeds the "Latest" wire; without entries here that section has nothing to
-// render and the homepage rail sits empty.
-const LEFT_COLUMN = [
-  "national-order-mill-vendor-exodus-60-day-payment-terms",
-  "occupancy-inspection-volumes-climb-delinquencies",
-  "gulf-coast-vendors-brace-hurricane-season-surge",
-];
-const RIGHT_COLUMN = [
-  "fha-extends-deadline-conveyance-photo-standards",
-  "regional-field-companies-q2-order-volume-rebound",
-  "winterization-deadlines-move-up-northern-zones",
-  "judicial-backlogs-foreclosure-timeline-past-900-days",
-];
-
 // --- Top-level await: `payload run` waits for module evaluation to finish ---
 
 const payload = await getPayload({ config });
@@ -208,15 +193,6 @@ for (const p of articles) {
       excerpt: p.excerpt,
       body: p.slug === LEAD ? hudBody : undefined,
       featured: p.slug === LEAD,
-      homepageColumn: LEFT_COLUMN.includes(p.slug)
-        ? "left"
-        : RIGHT_COLUMN.includes(p.slug)
-          ? "right"
-          : "none",
-      homepageOrder:
-        (LEFT_COLUMN.includes(p.slug) ? LEFT_COLUMN : RIGHT_COLUMN).indexOf(
-          p.slug
-        ) + 1,
       category: catId[p.category.slug],
       tags: p.tags.map((t) => tagId[t.slug]).filter(Boolean),
       author: authorId[p.author.slug],

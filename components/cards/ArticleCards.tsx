@@ -13,7 +13,7 @@ export function StoryCompact({ article }: { article: Article }) {
   return (
     <article className="border-b border-line2 py-[18px]">
       <CategoryEyebrow category={article.category} />
-      <h3 className="mb-1.5 mt-1.5 font-serif text-[18px] font-bold leading-[1.3] text-ink">
+      <h3 className="mb-1.5 mt-1.5 line-clamp-2 font-serif text-[18px] font-bold leading-[1.3] text-ink">
         <Link href={href(article)} className="hover:text-[#0E489C]">
           {article.title}
         </Link>
@@ -36,14 +36,11 @@ export function SecondaryCard({ article }: { article: Article }) {
         />
       </Link>
       <CategoryEyebrow category={article.category} />
-      <h3 className="mb-2 mt-1.5 font-serif text-[20px] font-bold leading-[1.25] text-ink">
+      <h3 className="mb-2 mt-1.5 line-clamp-2 font-serif text-[20px] font-bold leading-[1.25] text-ink">
         <Link href={href(article)} className="hover:text-[#0E489C]">
           {article.title}
         </Link>
       </h3>
-      <p className="mb-2 text-[14px] leading-[1.55] text-gray-600">
-        {article.excerpt}
-      </p>
       <Byline article={article} withBy={false} dateVariant="relative" />
     </article>
   );

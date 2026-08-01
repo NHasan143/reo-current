@@ -29,6 +29,10 @@ import {
   mostRead,
   testimonial,
 } from "./mock-data";
+import {
+  getSubcategoriesForParent,
+  getSubcategory,
+} from "./category-config";
 
 // Cache the Payload instance across requests.
 let cached: Promise<Payload> | null = null;
@@ -106,6 +110,7 @@ function mapPost(p: any): Article {
     excerpt: p.excerpt ?? "",
     body: p.body ?? undefined,
     category: typeof p.category === "object" ? mapCategory(p.category) : ({} as Category),
+    subcategory: p.subcategory ?? undefined,
     tags: Array.isArray(p.tags)
       ? p.tags.filter((t: any) => typeof t === "object").map(mapTag)
       : [],
@@ -167,7 +172,7 @@ export async function getPrimaryNav(): Promise<NavItem[]> {
 
     const key = String(categoryID);
     const recent = recentByCategory.get(key) ?? [];
-    if (recent.length >= 4) continue;
+    if (recent.length >= 3) continue;
 
     recent.push({
       slug: post.slug,
@@ -178,11 +183,23 @@ export async function getPrimaryNav(): Promise<NavItem[]> {
     recentByCategory.set(key, recent);
   }
 
-  return categories.docs.map((category: any) => ({
-    label: category.name,
-    href: `/category/${category.slug}`,
-    recentPosts: recentByCategory.get(String(category.id)) ?? [],
-  }));
+  return categories.docs
+    .filter((category: any) => category.slug !== "mortgage")
+    .map((category: any) => {
+      const href = `/category/${category.slug}`;
+
+      return {
+        label: category.name,
+        href,
+        children: getSubcategoriesForParent(category.slug).map(
+          ({ label, slug }) => ({
+            label,
+            href: `${href}/${slug}`,
+          })
+        ),
+        recentPosts: recentByCategory.get(String(category.id)) ?? [],
+      };
+    });
 }
 
 export async function getFooterSections(): Promise<NavItem[]> {
@@ -296,29 +313,47 @@ export async function getArticlesBySlugs(slugs: string[]): Promise<Article[]> {
 }
 
 export async function getHomepageLeftStories(): Promise<Article[]> {
-  return getHomepageColumnStories("left");
+  const p = await payload();
+  const [categories, posts] = await Promise.all([
+    p.find({
+      collection: "categories",
+      limit: 50,
+      sort: "order",
+      depth: 0,
+    }),
+    p.find({
+      collection: "posts",
+      limit: 500,
+      sort: "-date",
+      depth: 2,
+    }),
+  ]);
+
+  const latestByCategory = new Map<string, Article>();
+
+  for (const post of posts.docs as any[]) {
+    const categoryID =
+      typeof post.category === "object" ? post.category?.id : post.category;
+    if (categoryID == null) continue;
+
+    const key = String(categoryID);
+    if (!latestByCategory.has(key)) {
+      latestByCategory.set(key, mapPost(post));
+    }
+  }
+
+  return categories.docs
+    .filter((category: any) => category.slug !== "mortgage")
+    .map((category: any) => latestByCategory.get(String(category.id)))
+    .filter((article): article is Article => Boolean(article));
 }
 
 export async function getHomepageRightStories(): Promise<Article[]> {
-  return getHomepageColumnStories("right");
+  return getLatestArticles(7);
 }
 
 export async function getHomepageSecondary(): Promise<Article[]> {
   return getArticlesBySlugs(homepageSecondarySlugs);
-}
-
-async function getHomepageColumnStories(
-  column: "left" | "right"
-): Promise<Article[]> {
-  const p = await payload();
-  const res = await p.find({
-    collection: "posts",
-    where: { homepageColumn: { equals: column } },
-    sort: ["homepageOrder", "-date"],
-    limit: 50,
-    depth: 2,
-  });
-  return res.docs.map(mapPost);
 }
 
 export async function getRelatedArticles(slug: string, limit = 3): Promise<Article[]> {
@@ -399,6 +434,34 @@ export async function getArticlesByCategory(slug: string): Promise<Article[]> {
     const fallback = await p.find({ collection: "posts", sort: "-date", limit: 20, depth: 2 });
     return fallback.docs.map(mapPost);
   }
+  return res.docs.map(mapPost);
+}
+
+export async function getArticlesBySubcategory(
+  parentSlug: string,
+  subcategorySlug: string
+): Promise<Article[]> {
+  if (!getSubcategory(parentSlug, subcategorySlug)) {
+    return [];
+  }
+
+  const p = await payload();
+  const parent = await findOneBySlug("categories", parentSlug);
+  if (!parent) return [];
+
+  const res = await p.find({
+    collection: "posts",
+    where: {
+      and: [
+        { category: { equals: parent.id } },
+        { subcategory: { equals: subcategorySlug } },
+      ],
+    },
+    sort: "-date",
+    limit: 50,
+    depth: 2,
+  });
+
   return res.docs.map(mapPost);
 }
 

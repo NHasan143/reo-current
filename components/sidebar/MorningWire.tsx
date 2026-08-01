@@ -1,7 +1,8 @@
 import { MiniSignup } from "@/components/forms/MiniSignup";
 
 export function MorningWire({
-  description = "Daily industry briefing, in your inbox by 7 AM.",
+  description =
+    "Daily briefing on preservation, inspections, and REO — in your inbox by 9 AM.",
 }: {
   description?: string;
 }) {
@@ -10,6 +11,7 @@ export function MorningWire({
       title="The Morning Wire"
       description={description}
       cta="Sign Up Free"
+      className="min-h-[300px]"
     />
   );
 }

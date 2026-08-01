@@ -28,7 +28,7 @@ const HOMEPAGE_SECTIONS = [
 ] as const;
 
 export default async function HomePage() {
-  const [lead, pinnedRailStories, pinnedSecondary, pinnedRightStories] =
+  const [lead, railStories, pinnedSecondary, rightStories] =
     await Promise.all([
       getFeaturedArticle(),
       getHomepageLeftStories(),
@@ -36,17 +36,13 @@ export default async function HomePage() {
       getHomepageRightStories(),
     ]);
 
-  // A featured post belongs only in the center lead position, even if it was
-  // previously pinned to one of the surrounding homepage slots.
-  const railStories = pinnedRailStories.filter(
-    (article) => article.slug !== lead.slug
-  );
   const secondary = pinnedSecondary.filter(
     (article) => article.slug !== lead.slug
   );
-  const rightStories = pinnedRightStories.filter(
-    (article) => article.slug !== lead.slug
-  );
+  const alertArticles = [
+    lead,
+    ...rightStories.filter((article) => article.slug !== lead.slug).slice(0, 2),
+  ];
 
   const sections = await Promise.all(
     HOMEPAGE_SECTIONS.map(async (s) => ({
@@ -57,7 +53,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <AlertBar article={lead} />
+      <AlertBar articles={alertArticles} />
 
       <div className="container-page pb-14 pt-8">
         {/*
@@ -69,7 +65,7 @@ export default async function HomePage() {
           Tiers: one column below 768; main + right rail from 768; the full
           three-column grid at 1280, the width it was drawn for.
         */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_260px] md:gap-x-8 md:gap-y-10 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[1fr_2fr_1fr] xl:gap-0">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_260px] md:gap-x-8 md:gap-y-10 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[1fr_2fr_1.15fr] xl:gap-0">
           {/* Lead */}
           <div className="md:col-start-1 md:row-start-1 xl:col-start-2 xl:row-start-1 xl:px-7">
             <article>
@@ -128,7 +124,7 @@ export default async function HomePage() {
                 <LatestWire articles={rightStories} />
               </div>
             )}
-            <MorningWire description="Daily briefing on preservation, inspections, and REO — in your inbox by 7 AM." />
+            <MorningWire />
           </aside>
         </div>
 

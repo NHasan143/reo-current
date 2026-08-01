@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Article } from "@/lib/types";
 
 export function AlertBar({
-  article,
+  articles,
 }: {
-  article: Pick<Article, "slug" | "title">;
+  articles: Pick<Article, "slug" | "title">[];
 }) {
   return (
     <div className="border-b border-alertline bg-alertbg">
@@ -14,12 +14,32 @@ export function AlertBar({
         </span>
         <div className="alert-ticker min-w-0 flex-1 overflow-hidden">
           <div className="alert-ticker-track">
-            <Link
-              href={`/article/${article.slug}`}
-              className="font-semibold text-ink hover:text-[#0E489C] focus-visible:text-[#0E489C]"
-            >
-              {article.title}
-            </Link>
+            {[false, true].map((duplicate) => (
+              <div
+                key={duplicate ? "duplicate" : "original"}
+                className={`alert-ticker-group ${
+                  duplicate ? "alert-ticker-copy" : ""
+                }`}
+                aria-hidden={duplicate || undefined}
+              >
+                {articles.map((article, index) => (
+                  <span key={article.slug}>
+                    {index > 0 ? (
+                      <span className="mx-8 text-[#FD7402]" aria-hidden="true">
+                        •
+                      </span>
+                    ) : null}
+                    <Link
+                      href={`/article/${article.slug}`}
+                      tabIndex={duplicate ? -1 : undefined}
+                      className="font-semibold text-ink hover:text-[#0E489C] focus-visible:text-[#0E489C]"
+                    >
+                      {article.title}
+                    </Link>
+                  </span>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </div>
