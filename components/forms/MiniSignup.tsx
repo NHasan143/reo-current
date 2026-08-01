@@ -11,10 +11,12 @@ export function MiniSignup({
   title,
   description,
   cta = "Sign Up Free",
+  className = "",
 }: {
   title: string;
   description: string;
   cta?: string;
+  className?: string;
 }) {
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
@@ -26,7 +28,7 @@ export function MiniSignup({
   }
 
   return (
-    <div className="bg-ink px-5 py-6 text-white">
+    <div className={`bg-ink px-5 py-8 text-white ${className}`}>
       <div className="font-serif text-[20px] font-bold">{title}</div>
       {/* One of two running-text blurbs that sat at 13px; lifted a step on
           phones for legibility. Labels and secondary text elsewhere stay at

@@ -172,19 +172,41 @@ export interface Post {
    */
   featured?: boolean | null;
   /**
-   * Choose a side column for this post. Featured Post takes priority over this setting.
-   */
-  homepageColumn?: ('none' | 'left' | 'right') | null;
-  /**
-   * Lower numbers appear first within the selected side column.
-   */
-  homepageOrder?: number | null;
-  /**
    * URL-friendly identifier. Auto-generated from the title if left blank.
    */
   slug: string;
   date: string;
   category: number | Category;
+  /**
+   * Optional. Select a child category that belongs to the chosen main category.
+   */
+  subcategory?:
+    | (
+        | 'securing-boarding'
+        | 'debris-trash-outs'
+        | 'yard-maintenance'
+        | 'cleaning-restoration'
+        | 'repairs-rehab'
+        | 'occupancy-inspections'
+        | 'inspection-types'
+        | 'inspection-pay-tech'
+        | 'national-regional-companies'
+        | 'company-moves'
+        | 'technology-platforms'
+        | 'vendor-business'
+        | 'jobs-careers'
+        | 'training-startup'
+        | 'foreclosure-news'
+        | 'reo-bank-owned'
+        | 'vacant-properties'
+        | 'investor-guidelines'
+        | 'hud-fha-rules'
+        | 'pricing-allowables'
+        | 'state-local-rules'
+        | 'disaster-events'
+        | 'disaster-response'
+      )
+    | null;
   author: number | Author;
   tags?: (number | Tag)[] | null;
   featuredImage?: (number | null) | Media;
@@ -508,11 +530,10 @@ export interface PostsSelect<T extends boolean = true> {
         secondaryKeywords?: T;
       };
   featured?: T;
-  homepageColumn?: T;
-  homepageOrder?: T;
   slug?: T;
   date?: T;
   category?: T;
+  subcategory?: T;
   author?: T;
   tags?: T;
   featuredImage?: T;

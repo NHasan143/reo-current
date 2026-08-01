@@ -1,10 +1,11 @@
 import Link from "next/link";
 import type { Article } from "@/lib/types";
 
-function formatTime(date: string): string {
+function formatDate(date: string): string {
   return new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
     timeZone: "UTC",
   }).format(new Date(date));
 }
@@ -34,9 +35,9 @@ export function LatestWire({
               className="group flex items-baseline gap-2.5 py-3"
             >
               <span className="shrink-0 whitespace-nowrap text-[11px] font-bold text-[#0E489C]">
-                {formatTime(article.date)}
+                {formatDate(article.date)}
               </span>
-              <span className="text-[14px] font-semibold leading-[1.4] text-ink group-hover:text-[#0E489C]">
+              <span className="line-clamp-2 min-w-0 text-[14px] font-semibold leading-[1.4] text-ink group-hover:text-[#0E489C]">
                 {article.title}
               </span>
             </Link>
