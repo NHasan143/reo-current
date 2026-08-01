@@ -147,7 +147,7 @@ export default async function ArticlePage({
                 <Link
                   key={tag.slug}
                   href={`/tag/${tag.slug}`}
-                  className="border border-stroke px-3 py-[5px] text-[12px] font-semibold text-gray-600 transition-colors hover:border-[#FD7402] hover:text-[#FD7402]"
+                  className="touch-target inline-flex items-center border border-stroke px-3 py-[5px] text-[12px] font-semibold text-gray-600 transition-colors hover:border-[#FD7402] hover:text-[#FD7402]"
                 >
                   {tag.name}
                 </Link>

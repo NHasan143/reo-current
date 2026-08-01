@@ -8,16 +8,29 @@ export interface Crumb {
 
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
   return (
-    <nav aria-label="Breadcrumb" className="text-[12px] text-gray-400">
+    <nav
+      aria-label="Breadcrumb"
+      className="-ml-2 flex flex-wrap items-center text-[12px] text-gray-400 lg:ml-0"
+    >
       {items.map((item, i) => (
         <Fragment key={i}>
           {i > 0 && <span className="mx-2 text-gray-300">/</span>}
           {item.href ? (
-            <Link href={item.href} className="hover:text-[#FD7402]">
+            // Crumbs are navigation, not prose, so they take the 44px touch
+            // row below lg rather than the inline-text exemption. Short labels
+            // like "Home" need the horizontal padding to clear 44px wide too.
+            <Link
+              href={item.href}
+              className="touch-target flex min-w-[44px] items-center justify-center px-2 hover:text-[#FD7402] lg:min-w-0 lg:px-0"
+            >
               {item.label}
             </Link>
           ) : (
-            <span className="font-semibold text-gray-600">{item.label}</span>
+            // Matches the links' padding so the nav's -ml-2 lands correctly
+            // whichever kind of crumb comes first.
+            <span className="flex items-center px-2 font-semibold text-gray-600 lg:px-0">
+              {item.label}
+            </span>
           )}
         </Fragment>
       ))}

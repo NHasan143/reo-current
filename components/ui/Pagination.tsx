@@ -12,8 +12,9 @@ function pageList(current: number, total: number): (number | "…")[] {
   return pages;
 }
 
+// min-w matters as much as min-h here: a single-digit page sits at 39px wide.
 const CELL =
-  "inline-flex h-[38px] items-center justify-center border px-[15px] text-[13px]";
+  "touch-target inline-flex min-w-[44px] items-center justify-center border px-[15px] text-[13px] lg:h-[38px] lg:min-w-0";
 
 export function Pagination({
   currentPage = 1,

@@ -33,7 +33,10 @@ export default async function SearchPage({
             </p>
           )}
 
-          {/* Search box */}
+          {/* Search box. 16px holds to md (where iOS Safari stops zooming on
+              focus); the 44px height holds to lg, since tablets are still
+              touch. The submit button tracks the input so the row stays
+              aligned. */}
           <form action="/search" role="search" className="mt-5 flex max-w-md gap-2.5">
             <input
               type="search"
@@ -41,9 +44,9 @@ export default async function SearchPage({
               defaultValue={query}
               placeholder="Search news…"
               aria-label="Search news"
-              className="h-[42px] w-full border border-stroke px-3.5 text-[14px] outline-none focus:border-gray-500"
+              className="h-11 w-full border border-stroke px-3.5 text-[16px] outline-none focus:border-gray-500 md:text-[14px] lg:h-[42px]"
             />
-            <button type="submit" className="btn-brand h-[42px]">
+            <button type="submit" className="btn-brand h-11 lg:h-[42px]">
               Search
             </button>
           </form>

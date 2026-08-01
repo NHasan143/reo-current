@@ -193,17 +193,6 @@ for (const p of articles) {
       excerpt: p.excerpt,
       body: p.slug === LEAD ? hudBody : undefined,
       featured: p.slug === LEAD,
-      homepageColumn:
-        p.slug === "national-order-mill-vendor-exodus-60-day-payment-terms" ||
-        p.slug === "occupancy-inspection-volumes-climb-delinquencies" ||
-        p.slug === "gulf-coast-vendors-brace-hurricane-season-surge"
-          ? "left"
-          : "none",
-      homepageOrder: [
-        "national-order-mill-vendor-exodus-60-day-payment-terms",
-        "occupancy-inspection-volumes-climb-delinquencies",
-        "gulf-coast-vendors-brace-hurricane-season-surge",
-      ].indexOf(p.slug) + 1,
       category: catId[p.category.slug],
       tags: p.tags.map((t) => tagId[t.slug]).filter(Boolean),
       author: authorId[p.author.slug],

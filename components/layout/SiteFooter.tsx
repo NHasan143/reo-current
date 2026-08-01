@@ -31,9 +31,16 @@ function FooterColumn({
       <div className="mb-3 text-[12px] font-bold uppercase tracking-[1.5px] text-white">
         {title}
       </div>
-      <div className="flex flex-col gap-2 text-[13px]">
+      {/* Each link fills a 44px touch row below lg. A small gap stays so
+          adjacent targets aren't flush — WCAG 2.5.8 wants separation between
+          them — widening to the design's spacing on desktop. */}
+      <div className="flex flex-col gap-1 text-[13px] lg:gap-2">
         {items.map((item) => (
-          <Link key={item.href} href={item.href} className="text-utility hover:text-white">
+          <Link
+            key={item.href}
+            href={item.href}
+            className="touch-target flex items-center text-utility hover:text-white"
+          >
             {item.label}
           </Link>
         ))}
@@ -60,7 +67,9 @@ export function SiteFooter() {
               className="absolute left-1/2 top-1/2 h-auto w-[190px] max-w-none -translate-x-1/2 -translate-y-1/2"
             />
           </Link>
-          <p className="mt-2.5 max-w-xs text-[13px] leading-relaxed">
+          {/* The other 13px running-text blurb — lifted on phones to match
+              the Morning Wire description. */}
+          <p className="mt-2.5 max-w-xs text-[14px] leading-relaxed sm:text-[13px]">
             Independent reporting on property preservation, field services,
             inspections, and default servicing.
           </p>
