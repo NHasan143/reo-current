@@ -15,7 +15,7 @@ export function TagChips({ tags, title }: { tags: Tag[]; title?: string }) {
           <Link
             key={tag.slug}
             href={`/tag/${tag.slug}`}
-            className="touch-target inline-flex items-center border border-stroke px-[11px] py-[5px] text-[13px] font-semibold text-gray-600 transition-colors hover:border-brand hover:text-brand"
+            className="touch-target inline-flex items-center border border-stroke px-[11px] py-[5px] text-[13px] font-semibold text-gray-600 transition-colors hover:border-[#FD7402] hover:text-[#FD7402]"
           >
             #{tag.name}
           </Link>

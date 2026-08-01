@@ -84,6 +84,14 @@ export interface SEOFields {
 export interface NavItem {
   label: string;
   href: string;
+  recentPosts?: NavPost[];
+}
+
+export interface NavPost {
+  slug: string;
+  title: string;
+  displayDate: string;
+  featuredImageUrl?: string;
 }
 
 /** Item in the sidebar "Most Read" ranked list. */
@@ -93,7 +101,6 @@ export interface MostReadItem {
   href: string;
 }
 
-/** Item in the homepage "Latest" wire (timestamped). */
 export interface Testimonial {
   quote: string;
   name: string;

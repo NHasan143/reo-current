@@ -21,7 +21,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
             // like "Home" need the horizontal padding to clear 44px wide too.
             <Link
               href={item.href}
-              className="touch-target flex min-w-[44px] items-center justify-center px-2 hover:text-brand lg:min-w-0 lg:px-0"
+              className="touch-target flex min-w-[44px] items-center justify-center px-2 hover:text-[#FD7402] lg:min-w-0 lg:px-0"
             >
               {item.label}
             </Link>

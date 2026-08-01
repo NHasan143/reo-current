@@ -11,7 +11,7 @@ export function CategoryEyebrow({
   return (
     <Link
       href={`/category/${category.slug}`}
-      className={`eyebrow hover:text-brand-dark ${className}`}
+      className={`eyebrow hover:text-[#0E489C] ${className}`}
     >
       {category.name}
     </Link>

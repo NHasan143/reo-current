@@ -78,7 +78,7 @@ export default async function AuthorPage({
             className="shrink-0"
           />
           <div>
-            <div className="text-[12px] font-bold uppercase tracking-[1.2px] text-brand">
+            <div className="text-[12px] font-bold uppercase tracking-[1.2px] text-[#FD7402]">
               {author.role}
             </div>
             <h1 className="mb-2.5 mt-2 font-serif text-[36px] font-bold text-ink md:text-[40px]">
@@ -151,7 +151,7 @@ export default async function AuthorPage({
                 </Link>
                 <span className="eyebrow">{featured.category.name}</span>
                 <h2 className="mb-2.5 mt-2 font-serif text-[28px] font-bold leading-[1.2] text-ink">
-                  <Link href={`/article/${featured.slug}`} className="hover:text-brand">
+                  <Link href={`/article/${featured.slug}`} className="hover:text-[#0E489C]">
                     {featured.title}
                   </Link>
                 </h2>

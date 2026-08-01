@@ -6,19 +6,21 @@ export function SectionHeading({
   href,
   linkLabel = "View All",
   className = "",
+  titleClassName = "",
 }: {
   title: string;
   href?: string;
   linkLabel?: string;
   className?: string;
+  titleClassName?: string;
 }) {
   return (
     <div className={`rule-heading ${className}`}>
-      <span className="rule-label">{title}</span>
+      <span className={`rule-label ${titleClassName}`}>{title}</span>
       {href && (
         <Link
           href={href}
-          className="touch-target inline-flex items-center text-[12px] font-semibold text-brand hover:text-brand-dark"
+          className="touch-target inline-flex items-center text-[12px] font-semibold text-[#0E489C] hover:text-[#FD7402]"
         >
           {linkLabel} <span aria-hidden="true">→</span>
         </Link>

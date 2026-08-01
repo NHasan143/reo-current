@@ -14,7 +14,7 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          DEFAULT: "#8a1c1c", // primary brick red
+          DEFAULT: "#fd7402", // primary orange
           dark: "#701319", // button hover
           light: "#c94a4a", // footer "Current"
         },

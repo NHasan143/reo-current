@@ -57,7 +57,7 @@ export function MiniSignup({
           />
           <button
             type="submit"
-            className="flex min-h-[44px] w-full items-center justify-center bg-brand py-2.5 text-[13px] font-bold uppercase tracking-[1px] text-white transition-colors hover:bg-brand-dark lg:min-h-0"
+            className="flex min-h-[44px] w-full items-center justify-center bg-[#FD7402] py-2.5 text-[13px] font-bold uppercase tracking-[1px] text-white transition-colors hover:bg-[#FD7402] lg:min-h-0"
           >
             {cta}
           </button>

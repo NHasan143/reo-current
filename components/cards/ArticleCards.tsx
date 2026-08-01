@@ -14,7 +14,7 @@ export function StoryCompact({ article }: { article: Article }) {
     <article className="border-b border-line2 py-[18px]">
       <CategoryEyebrow category={article.category} />
       <h3 className="mb-1.5 mt-1.5 font-serif text-[18px] font-bold leading-[1.3] text-ink">
-        <Link href={href(article)} className="hover:text-brand">
+        <Link href={href(article)} className="hover:text-[#0E489C]">
           {article.title}
         </Link>
       </h3>
@@ -37,7 +37,7 @@ export function SecondaryCard({ article }: { article: Article }) {
       </Link>
       <CategoryEyebrow category={article.category} />
       <h3 className="mb-2 mt-1.5 font-serif text-[20px] font-bold leading-[1.25] text-ink">
-        <Link href={href(article)} className="hover:text-brand">
+        <Link href={href(article)} className="hover:text-[#0E489C]">
           {article.title}
         </Link>
       </h3>
@@ -55,7 +55,7 @@ export function StoryRow({ article }: { article: Article }) {
     <article className="grid grid-cols-[1fr_110px] gap-4 border-b border-line2 py-4">
       <div className="min-w-0">
         <h3 className="mb-1.5 font-serif text-[17px] font-bold leading-[1.3] text-ink">
-          <Link href={href(article)} className="hover:text-brand">
+          <Link href={href(article)} className="hover:text-[#0E489C]">
             {article.title}
           </Link>
         </h3>
@@ -97,7 +97,7 @@ export function ArticleListItem({
         <h3
           className={`mb-2.5 mt-1.5 font-serif font-bold leading-[1.25] text-ink ${headingClassName}`}
         >
-          <Link href={href(article)} className="hover:text-brand">
+          <Link href={href(article)} className="hover:text-[#0E489C]">
             {article.title}
           </Link>
         </h3>

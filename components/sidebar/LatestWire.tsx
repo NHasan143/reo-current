@@ -33,10 +33,10 @@ export function LatestWire({
               href={`/article/${article.slug}`}
               className="group flex items-baseline gap-2.5 py-3"
             >
-              <span className="shrink-0 whitespace-nowrap text-[11px] font-bold text-brand">
+              <span className="shrink-0 whitespace-nowrap text-[11px] font-bold text-[#0E489C]">
                 {formatTime(article.date)}
               </span>
-              <span className="text-[14px] font-semibold leading-[1.4] text-ink group-hover:text-brand">
+              <span className="text-[14px] font-semibold leading-[1.4] text-ink group-hover:text-[#0E489C]">
                 {article.title}
               </span>
             </Link>
