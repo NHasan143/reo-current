@@ -1,7 +1,10 @@
-import type { CollectionConfig } from "payload";
+import type { CollectionConfig, Payload } from "payload";
 import { seoFields } from "../fields/seo";
 import { slugField } from "../fields/slug";
-import { allCategorySubcategories } from "../lib/category-config";
+import {
+  allCategorySubcategories,
+  getSubcategoriesForParent,
+} from "../lib/category-config";
 
 /** Blog posts / articles — the main content type editors manage. */
 export const Posts: CollectionConfig = {
@@ -87,6 +90,49 @@ export const Posts: CollectionConfig = {
         position: "sidebar",
         description:
           "Optional. Select a child category that belongs to the chosen main category.",
+      },
+      // The dropdown lists every subcategory in the site, so nothing stopped an
+      // editor pairing "Disaster Events" with the Field Inspections category.
+      // Such a post then matched no subcategory page at all — it silently
+      // vanished from the child listing instead of being rejected on save.
+      validate: async (
+        value: unknown,
+        {
+          data,
+          req,
+        }: {
+          data?: Partial<{ category: number | string | { id: number | string } }>;
+          req: { payload: Payload };
+        }
+      ) => {
+        if (!value) return true;
+
+        const category = data?.category;
+        const categoryID =
+          category && typeof category === "object" ? category.id : category;
+        if (!categoryID) return true;
+
+        let parentSlug: string | undefined;
+        try {
+          const parent = await req.payload.findByID({
+            collection: "categories",
+            id: categoryID,
+            depth: 0,
+          });
+          parentSlug = parent?.slug;
+        } catch {
+          return true; // Category lookup failed; the category field reports it.
+        }
+        if (!parentSlug) return true;
+
+        const allowed = getSubcategoriesForParent(parentSlug);
+        if (allowed.some((child) => child.slug === value)) return true;
+
+        return allowed.length
+          ? `That subcategory belongs to a different section. Choose one of: ${allowed
+              .map((child) => child.label)
+              .join(", ")}.`
+          : "The selected category has no subcategories. Leave this field blank.";
       },
     },
     {

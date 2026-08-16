@@ -572,7 +572,11 @@ export const primaryNav: NavItem[] = [
 export const footerSections: NavItem[] = [
   { label: "Property Preservation", href: "/category/property-preservation" },
   { label: "Field Inspections", href: "/category/field-inspections" },
+  { label: "Field Service Companies", href: "/category/field-service-companies" },
+  { label: "Contractors & Vendors", href: "/category/contractors-vendors" },
   { label: "Foreclosure & REO", href: "/category/foreclosure-reo" },
+  { label: "Compliance & Pricing", href: "/category/compliance-pricing" },
+  { label: "Disaster & Field Alerts", href: "/category/disaster-field-alerts" },
   { label: "Mortgage", href: "/category/mortgage" },
 ];
 

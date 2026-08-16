@@ -54,10 +54,18 @@ export function MainNav({ navItems }: { navItems: NavItem[] }) {
 
   // Close both on navigation — either would otherwise survive a route change.
   // Focus is left alone here; the destination page owns it.
-  useEffect(() => {
+  //
+  // Done during render rather than in an effect: an effect that calls setState
+  // commits the stale-open panel first and then immediately re-renders to
+  // close it, so every navigation paid for a second render pass (and could
+  // flash the old panel). This is React's documented "adjust state when a prop
+  // changes" pattern — the re-render happens before the browser paints.
+  const [lastPathname, setLastPathname] = useState(pathname);
+  if (lastPathname !== pathname) {
+    setLastPathname(pathname);
     setOpen(false);
     setOpenHref(null);
-  }, [pathname]);
+  }
 
   // The drawer only exists below md. Crossing that boundary while open would
   // otherwise leave `open` true — drawer mounted but CSS-hidden, body scroll
@@ -198,13 +206,11 @@ export function MainNav({ navItems }: { navItems: NavItem[] }) {
               </Link>
             </div>
 
-            <div
-              className={
-                openItem.children?.length
-                  ? "grid grid-cols-[220px_1fr] gap-8"
-                  : undefined
-              }
-            >
+            {/* The two tracks are fixed, not conditional. A category without
+                subcategories (Mortgage) keeps the empty 220px column so its
+                post cards stay the same width and align with every other
+                panel — dropping the track widened them and shifted the row. */}
+            <div className="grid grid-cols-[220px_1fr] gap-8">
               {openItem.children?.length ? (
                 <div className="border-r border-line pr-7">
                   <div className="flex flex-col">
@@ -220,7 +226,9 @@ export function MainNav({ navItems }: { navItems: NavItem[] }) {
                     ))}
                   </div>
                 </div>
-              ) : null}
+              ) : (
+                <div aria-hidden />
+              )}
 
               {openItem.recentPosts?.length ? (
                 <div

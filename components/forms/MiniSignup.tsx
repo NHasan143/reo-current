@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 
 /**
  * Compact dark newsletter box used in the sidebar ("The Morning Wire",
@@ -20,6 +20,10 @@ export function MiniSignup({
 }) {
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
+  // The id was built from the title ("mini-Follow Sarah's beat"), which is not
+  // a valid HTML id — ids may not contain whitespace — so the label never
+  // bound to the input. useId also keeps it unique if two boxes share a title.
+  const inputId = useId();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,19 +47,22 @@ export function MiniSignup({
         </p>
       ) : (
         <form onSubmit={handleSubmit}>
-          <label className="sr-only" htmlFor={`mini-${title}`}>
+          <label className="sr-only" htmlFor={inputId}>
             Email address
           </label>
           {/* 16px holds to md (where iOS Safari stops zooming on focus); the
-              44px height holds to lg, since tablets are still touch. */}
+              44px height holds to lg, since tablets are still touch.
+              outline-none removed the only focus indicator this field had and
+              nothing replaced it, so keyboard users had no idea where they
+              were — it now takes the same orange ring as the full form. */}
           <input
-            id={`mini-${title}`}
+            id={inputId}
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
-            className="mb-2.5 h-11 w-full bg-white px-3 text-[16px] text-ink outline-none md:text-[13px] lg:h-[38px]"
+            className="mb-2.5 h-11 w-full bg-white px-3 text-[16px] text-ink outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FD7402] md:text-[13px] lg:h-[38px]"
           />
           <button
             type="submit"

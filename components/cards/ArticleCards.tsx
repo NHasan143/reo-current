@@ -8,6 +8,16 @@ function href(article: Article) {
   return `/article/${article.slug}`;
 }
 
+/**
+ * Thumbnails sit inside their own link to the article, but the image carries
+ * no alt text and the placeholder is aria-hidden, so those links reached
+ * assistive tech as anonymous "link" with no name (WCAG 2.4.4 / 4.1.2). The
+ * headline beside each one already points at the same article, so the image
+ * link is decorative: hidden from the a11y tree and out of the tab order,
+ * which also removes a duplicate tab stop per card for keyboard users.
+ */
+const DECORATIVE_LINK = { "aria-hidden": true, tabIndex: -1 } as const;
+
 /** Homepage left-rail: image-less, category + headline + meta. */
 export function StoryCompact({ article }: { article: Article }) {
   return (
@@ -27,7 +37,7 @@ export function StoryCompact({ article }: { article: Article }) {
 export function SecondaryCard({ article }: { article: Article }) {
   return (
     <article>
-      <Link href={href(article)}>
+      <Link href={href(article)} {...DECORATIVE_LINK}>
         <Photo
           src={article.featuredImageUrl}
           label="Photo"
@@ -58,7 +68,7 @@ export function StoryRow({ article }: { article: Article }) {
         </h3>
         <Byline article={article} withBy={false} />
       </div>
-      <Link href={href(article)}>
+      <Link href={href(article)} {...DECORATIVE_LINK}>
         <Photo
           src={article.featuredImageUrl}
           sizes="110px"
@@ -107,7 +117,11 @@ export function ArticleListItem({
           <Byline article={article} />
         )}
       </div>
-      <Link href={href(article)} className="order-first sm:order-last">
+      <Link
+        href={href(article)}
+        className="order-first sm:order-last"
+        {...DECORATIVE_LINK}
+      >
         <Photo
           src={article.featuredImageUrl}
           sizes={`${thumbWidth}px`}

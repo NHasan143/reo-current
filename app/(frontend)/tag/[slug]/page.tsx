@@ -57,10 +57,13 @@ export default async function TagPage({
       {/* Tag hero */}
       <section className="border-b border-line bg-paper">
         <div className="container-page py-10">
+          {/* "Tags" was a link to /tag, which is not a route — every tag page
+              shipped a breadcrumb that 404s. There is no tag index to point
+              at, so it stays as plain text. */}
           <Breadcrumbs
             items={[
               { label: "Home", href: "/" },
-              { label: "Tags", href: "/tag" },
+              { label: "Tags" },
               { label: tag.name },
             ]}
           />
@@ -76,8 +79,12 @@ export default async function TagPage({
             </p>
           )}
           <div className="flex items-center gap-4">
+            {/* Count the articles actually listed below. The editor-entered
+                articleCount drifts from reality as posts are added or
+                retagged, and contradicting the visible list is worse than
+                having no number. */}
             <span className="text-[13px] font-bold text-ink">
-              {tag.articleCount ?? articles.length} articles
+              {articles.length} {articles.length === 1 ? "article" : "articles"}
             </span>
             <FollowButton label="Follow Tag" followingLabel="Following" />
           </div>
@@ -109,6 +116,12 @@ export default async function TagPage({
             {initial.map((article) => (
               <ArticleListItem key={article.slug} article={article} />
             ))}
+
+            {articles.length === 0 && (
+              <p className="border-y border-line py-8 text-[16px] text-gray-600">
+                No articles have been tagged #{tag.name} yet.
+              </p>
+            )}
 
             {more.length > 0 && (
               <RevealMore>

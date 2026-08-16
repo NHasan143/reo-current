@@ -48,9 +48,20 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${serif.variable} ${sans.variable}`}>
       <body className="flex min-h-screen flex-col">
+        {/* Keyboard and screen-reader users otherwise tab through the utility
+            bar, masthead, and every category link before reaching the story
+            on every single page (WCAG 2.4.1). */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-ink focus:px-4 focus:py-2 focus:text-[14px] focus:font-semibold focus:text-white"
+        >
+          Skip to main content
+        </a>
         <TopBar />
         <SiteHeader navItems={navItems} />
-        <main className="flex-1">{children}</main>
+        <main id="main-content" tabIndex={-1} className="flex-1">
+          {children}
+        </main>
         <SiteFooter />
       </body>
     </html>
