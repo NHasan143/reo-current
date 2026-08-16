@@ -1,4 +1,4 @@
-# REO Current 
+# REO Current
 
 REO Current is a property-preservation and field-services news publication built
 with Next.js, TypeScript, Tailwind CSS, and Payload CMS. The public website and
