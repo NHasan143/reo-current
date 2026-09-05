@@ -549,7 +549,7 @@ export const mostRead: MostReadItem[] = [
 
 export const testimonial: Testimonial = {
   quote:
-    "The Morning Wire is the first thing I read. It's the only source that actually understands the field side of this business.",
+    "The REO Current is the first thing I read. It's the only source that actually understands the field side of this business.",
   name: "Carlos Mendez",
   title: "Owner, Sunbelt Field Services",
 };
