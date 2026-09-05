@@ -140,7 +140,8 @@ export default async function AuthorPage({
 
             {showFeatured && (
               <article className="border-b border-line2 py-6">
-                <Link href={`/article/${featured.slug}`}>
+                {/* Decorative: the headline below links to the same article. */}
+                <Link href={`/article/${featured.slug}`} aria-hidden tabIndex={-1}>
                   <Photo
                     src={featured.featuredImageUrl}
                     label="Featured Photo"
@@ -171,6 +172,14 @@ export default async function AuthorPage({
                 headingClassName="text-[21px]"
               />
             ))}
+
+            {/* Previously this listed other reporters' articles, which
+                misattributed their bylines to this author. */}
+            {articles.length === 0 && (
+              <p className="border-b border-line2 py-8 text-[16px] text-gray-600">
+                {author.name} has no published articles yet.
+              </p>
+            )}
 
             {totalPages > 1 && (
               <Pagination

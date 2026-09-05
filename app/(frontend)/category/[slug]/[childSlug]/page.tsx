@@ -101,7 +101,8 @@ export default async function SubcategoryPage({
           <div className="min-w-0">
             {showTop ? (
               <article className="mb-2 border-b-2 border-ink pb-7">
-                <Link href={`/article/${topStory.slug}`}>
+                {/* Decorative: the headline below links to the same article. */}
+                <Link href={`/article/${topStory.slug}`} aria-hidden tabIndex={-1}>
                   <Photo
                     src={topStory.featuredImageUrl}
                     label="Featured Photo"

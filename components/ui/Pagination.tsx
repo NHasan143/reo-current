@@ -29,6 +29,7 @@ export function Pagination({
 }) {
   const href = (p: number) => (p === 1 ? basePath : `${basePath}?page=${p}`);
   const prevDisabled = currentPage <= 1;
+  const nextDisabled = currentPage >= totalPages;
 
   return (
     <nav
@@ -72,12 +73,23 @@ export function Pagination({
         )
       )}
 
-      <Link
-        href={href(Math.min(totalPages, currentPage + 1))}
-        className={`${CELL} border-stroke font-semibold text-ink hover:border-ink`}
-      >
-        Next →
-      </Link>
+      {/* On the last page this used to stay an active link pointing at the
+          page you were already on — a focusable control that did nothing.
+          It now matches how Prev behaves at the other end. */}
+      {nextDisabled ? (
+        <span
+          className={`${CELL} cursor-not-allowed border-stroke font-semibold text-gray-400`}
+        >
+          Next →
+        </span>
+      ) : (
+        <Link
+          href={href(currentPage + 1)}
+          className={`${CELL} border-stroke font-semibold text-ink hover:border-ink`}
+        >
+          Next →
+        </Link>
+      )}
     </nav>
   );
 }

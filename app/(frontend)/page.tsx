@@ -36,6 +36,22 @@ export default async function HomePage() {
       getHomepageRightStories(),
     ]);
 
+  // An empty CMS is a legitimate state (fresh install, or everything
+  // unpublished). Render the shell rather than crashing on a missing lead.
+  if (!lead) {
+    return (
+      <div className="container-page py-24 text-center">
+        <p className="eyebrow">No stories yet</p>
+        <h1 className="mt-3 font-serif text-[32px] font-bold text-ink">
+          Nothing has been published yet.
+        </h1>
+        <p className="mt-3 text-[16px] text-gray-600">
+          Add your first post in the CMS and it will appear here.
+        </p>
+      </div>
+    );
+  }
+
   const secondary = pinnedSecondary.filter(
     (article) => article.slug !== lead.slug
   );
@@ -69,7 +85,9 @@ export default async function HomePage() {
           {/* Lead */}
           <div className="md:col-start-1 md:row-start-1 xl:col-start-2 xl:row-start-1 xl:px-7">
             <article>
-              <Link href={`/article/${lead.slug}`}>
+              {/* Decorative: the headline below links to the same article.
+                  Without this it is a link with no accessible name. */}
+              <Link href={`/article/${lead.slug}`} aria-hidden tabIndex={-1}>
                 <Photo
                   src={lead.featuredImageUrl}
                   label="Lead Photo"

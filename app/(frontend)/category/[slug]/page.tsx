@@ -88,7 +88,8 @@ export default async function CategoryPage({
           <div className="min-w-0">
             {showTop && (
               <article className="mb-2 border-b-2 border-ink pb-7">
-                <Link href={`/article/${topStory.slug}`}>
+                {/* Decorative: the headline below links to the same article. */}
+                <Link href={`/article/${topStory.slug}`} aria-hidden tabIndex={-1}>
                   <Photo
                     src={topStory.featuredImageUrl}
                     label="Featured Photo"
@@ -122,6 +123,15 @@ export default async function CategoryPage({
             {pageItems.map((article) => (
               <ArticleListItem key={article.slug} article={article} />
             ))}
+
+            {/* A section with nothing published is a normal editor state. It
+                used to be papered over by showing the newest posts site-wide,
+                which read as if they belonged to this category. */}
+            {articles.length === 0 && (
+              <p className="border-y border-line py-8 text-[16px] text-gray-600">
+                No articles have been published in this section yet.
+              </p>
+            )}
 
             {totalPages > 1 && (
               <Pagination

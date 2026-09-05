@@ -11,6 +11,7 @@
 // graduate to a Payload global later.
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { cache } from "react";
 import { getPayload, type Payload } from "payload";
 import config from "@payload-config";
 import type {
@@ -45,13 +46,16 @@ function payload(): Promise<Payload> {
 
 function fmtDate(d: string): string {
   // Format in UTC so the displayed day matches the stored date regardless of
-  // the server's timezone.
+  // the server's timezone. A missing or unparseable date must not take the
+  // whole page down with a RangeError, so fall back to an empty label.
+  const parsed = new Date(d);
+  if (!d || Number.isNaN(parsed.getTime())) return "";
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
     timeZone: "UTC",
-  }).format(new Date(d));
+  }).format(parsed);
 }
 
 function initialsFrom(name: string): string {
@@ -133,7 +137,13 @@ function mapPost(p: any): Article {
 
 // ----- small query helpers -------------------------------------------------
 
-async function findOneBySlug(collection: any, slug: string): Promise<any | null> {
+// Memoised per request: pages routinely resolve the same slug twice (once in
+// generateMetadata, once in the component), which was issuing every lookup
+// query twice. React's cache() dedupes them within a single render pass.
+const findOneBySlug = cache(async function findOneBySlug(
+  collection: any,
+  slug: string
+): Promise<any | null> {
   const p = await payload();
   const res = await p.find({
     collection,
@@ -142,6 +152,19 @@ async function findOneBySlug(collection: any, slug: string): Promise<any | null>
     depth: 2,
   });
   return res.docs[0] ?? null;
+});
+
+// SQL LIKE treats % and _ as wildcards. Payload's `like` operator interpolates
+// the raw term into the pattern with no ESCAPE clause, so searching "%" matched
+// every row and "a%b" matched anything between an a and a b.
+//
+// The wildcards are deleted rather than replaced with a space: Payload splits a
+// search phrase on whitespace and requires every word, so substituting a space
+// would turn "a%b" into a two-letter AND query that matches almost everything.
+// Deleting gives "a%b" -> "ab" and "100%" -> "100", which is what a reader
+// typing those characters actually means.
+function stripLikeWildcards(term: string): string {
+  return term.replace(/[%_]/g, "").replace(/\s+/g, " ").trim();
 }
 
 // ----- site chrome ---------------------------------------------------------
@@ -183,23 +206,23 @@ export async function getPrimaryNav(): Promise<NavItem[]> {
     recentByCategory.set(key, recent);
   }
 
-  return categories.docs
-    .filter((category: any) => category.slug !== "mortgage")
-    .map((category: any) => {
-      const href = `/category/${category.slug}`;
+  // Every category is a nav item, ordered by the `order` sidebar field.
+  // Mortgage carries no subcategories, so its mega panel is recent posts only.
+  return categories.docs.map((category: any) => {
+    const href = `/category/${category.slug}`;
 
-      return {
-        label: category.name,
-        href,
-        children: getSubcategoriesForParent(category.slug).map(
-          ({ label, slug }) => ({
-            label,
-            href: `${href}/${slug}`,
-          })
-        ),
-        recentPosts: recentByCategory.get(String(category.id)) ?? [],
-      };
-    });
+    return {
+      label: category.name,
+      href,
+      children: getSubcategoriesForParent(category.slug).map(
+        ({ label, slug }) => ({
+          label,
+          href: `${href}/${slug}`,
+        })
+      ),
+      recentPosts: recentByCategory.get(String(category.id)) ?? [],
+    };
+  });
 }
 
 export async function getFooterSections(): Promise<NavItem[]> {
@@ -252,7 +275,10 @@ export async function getLatestArticles(limit?: number): Promise<Article[]> {
   return res.docs.map(mapPost);
 }
 
-export async function getFeaturedArticle(): Promise<Article> {
+// Returns null when the CMS has no posts at all. This used to throw, which
+// turned a brand-new (or fully emptied) CMS into a 500 on the homepage instead
+// of an empty but working page.
+export async function getFeaturedArticle(): Promise<Article | null> {
   const p = await payload();
   const featured = await p.find({
     collection: "posts",
@@ -265,8 +291,7 @@ export async function getFeaturedArticle(): Promise<Article> {
   if (featured.docs[0]) return mapPost(featured.docs[0]);
 
   const [latest] = await getLatestArticles(1);
-  if (!latest) throw new Error("No posts are available for the homepage feature.");
-  return latest;
+  return latest ?? null;
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
@@ -275,7 +300,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
 }
 
 export async function searchArticles(q: string, limit = 40): Promise<Article[]> {
-  const query = q.trim();
+  const query = stripLikeWildcards(q);
   if (!query) return [];
   const p = await payload();
   const res = await p.find({
@@ -359,10 +384,9 @@ export async function getHomepageSecondary(): Promise<Article[]> {
 export async function getRelatedArticles(slug: string, limit = 3): Promise<Article[]> {
   const current = await findOneBySlug("posts", slug);
   const p = await payload();
-  if (!current) {
-    const res = await p.find({ collection: "posts", limit, depth: 2 });
-    return res.docs.map(mapPost);
-  }
+  // No such article: there is nothing to be related to. (Callers 404 first;
+  // this keeps the function honest if it is ever used somewhere that doesn't.)
+  if (!current) return [];
   const categoryId =
     typeof current.category === "object" ? current.category.id : current.category;
   const res = await p.find({
@@ -376,7 +400,7 @@ export async function getRelatedArticles(slug: string, limit = 3): Promise<Artic
     limit,
     depth: 2,
   });
-  let docs = res.docs.map(mapPost);
+  const docs = res.docs.map(mapPost);
   if (docs.length < limit) {
     const fill = await p.find({
       collection: "posts",
@@ -416,13 +440,13 @@ export async function getAllCategorySlugs(): Promise<string[]> {
   return res.docs.map((d: any) => d.slug);
 }
 
+// A category with no posts returns an empty list. It previously fell back to
+// "the 20 newest posts site-wide", which put unrelated articles under the
+// category heading and defeated the homepage's empty-section check.
 export async function getArticlesByCategory(slug: string): Promise<Article[]> {
   const p = await payload();
   const cat = await findOneBySlug("categories", slug);
-  if (!cat) {
-    const res = await p.find({ collection: "posts", sort: "-date", limit: 20, depth: 2 });
-    return res.docs.map(mapPost);
-  }
+  if (!cat) return [];
   const res = await p.find({
     collection: "posts",
     where: { category: { equals: cat.id } },
@@ -430,10 +454,6 @@ export async function getArticlesByCategory(slug: string): Promise<Article[]> {
     limit: 50,
     depth: 2,
   });
-  if (res.docs.length === 0) {
-    const fallback = await p.find({ collection: "posts", sort: "-date", limit: 20, depth: 2 });
-    return fallback.docs.map(mapPost);
-  }
   return res.docs.map(mapPost);
 }
 
@@ -478,13 +498,12 @@ export async function getAllTagSlugs(): Promise<string[]> {
   return res.docs.map((d: any) => d.slug);
 }
 
+// Same rule as categories: an unused tag returns nothing rather than borrowing
+// unrelated articles.
 export async function getArticlesByTag(slug: string): Promise<Article[]> {
   const p = await payload();
   const tag = await findOneBySlug("tags", slug);
-  if (!tag) {
-    const res = await p.find({ collection: "posts", sort: "-date", limit: 6, depth: 2 });
-    return res.docs.map(mapPost);
-  }
+  if (!tag) return [];
   const res = await p.find({
     collection: "posts",
     where: { tags: { in: [tag.id] } },
@@ -492,10 +511,6 @@ export async function getArticlesByTag(slug: string): Promise<Article[]> {
     limit: 50,
     depth: 2,
   });
-  if (res.docs.length === 0) {
-    const fallback = await p.find({ collection: "posts", sort: "-date", limit: 6, depth: 2 });
-    return fallback.docs.map(mapPost);
-  }
   return res.docs.map(mapPost);
 }
 
@@ -523,13 +538,13 @@ export async function getAllAuthorSlugs(): Promise<string[]> {
   return res.docs.map((d: any) => d.slug);
 }
 
+// The fallback here was the most damaging of the three: an author with no
+// published posts listed other reporters' articles under "Latest by {name}",
+// misattributing bylines. An author with nothing published returns nothing.
 export async function getArticlesByAuthor(slug: string): Promise<Article[]> {
   const p = await payload();
   const author = await findOneBySlug("authors", slug);
-  if (!author) {
-    const res = await p.find({ collection: "posts", sort: "-date", limit: 6, depth: 2 });
-    return res.docs.map(mapPost);
-  }
+  if (!author) return [];
   const res = await p.find({
     collection: "posts",
     where: { author: { equals: author.id } },
@@ -537,9 +552,5 @@ export async function getArticlesByAuthor(slug: string): Promise<Article[]> {
     limit: 50,
     depth: 2,
   });
-  if (res.docs.length === 0) {
-    const fallback = await p.find({ collection: "posts", sort: "-date", limit: 6, depth: 2 });
-    return fallback.docs.map(mapPost);
-  }
   return res.docs.map(mapPost);
 }

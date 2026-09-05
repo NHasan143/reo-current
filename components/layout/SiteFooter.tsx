@@ -1,10 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 
+// All eight categories, in nav order. The band below lays them out four to a
+// row, so the first four fill row one and the rest fill row two.
 const sections = [
   { label: "Property Preservation", href: "/category/property-preservation" },
   { label: "Field Inspections", href: "/category/field-inspections" },
+  {
+    label: "Field Service Companies",
+    href: "/category/field-service-companies",
+  },
+  { label: "Contractors & Vendors", href: "/category/contractors-vendors" },
   { label: "Foreclosure & REO", href: "/category/foreclosure-reo" },
+  { label: "Compliance & Pricing", href: "/category/compliance-pricing" },
+  { label: "Disaster & Field Alerts", href: "/category/disaster-field-alerts" },
   { label: "Mortgage", href: "/category/mortgage" },
 ];
 
@@ -22,9 +31,11 @@ const legal = [
 function FooterColumn({
   title,
   items,
+  listClassName = "flex flex-col gap-1 lg:gap-2",
 }: {
   title: string;
   items: { label: string; href: string }[];
+  listClassName?: string;
 }) {
   return (
     <div>
@@ -34,7 +45,7 @@ function FooterColumn({
       {/* Each link fills a 44px touch row below lg. A small gap stays so
           adjacent targets aren't flush — WCAG 2.5.8 wants separation between
           them — widening to the design's spacing on desktop. */}
-      <div className="flex flex-col gap-1 text-[13px] lg:gap-2">
+      <div className={`text-[13px] ${listClassName}`}>
         {items.map((item) => (
           <Link
             key={item.href}
@@ -52,7 +63,10 @@ function FooterColumn({
 export function SiteFooter() {
   return (
     <footer className="bg-ink text-utility">
-      <div className="container-page grid grid-cols-2 gap-10 py-10 md:grid-cols-4 lg:grid-cols-[2fr_1fr_1fr_1fr]">
+      {/* Sections sits between the logo and Company. Its track is the widest
+          of the three link columns so the eight categories fit two abreast,
+          four rows deep, at every width — no breakpoint reflow. */}
+      <div className="container-page grid grid-cols-2 gap-10 py-10 md:grid-cols-4 lg:grid-cols-[1.6fr_2fr_0.7fr_0.7fr]">
         <div className="col-span-2 md:col-span-4 lg:col-span-1">
           <Link
             href="/"
@@ -74,10 +88,17 @@ export function SiteFooter() {
             inspections, and default servicing.
           </p>
         </div>
-        <FooterColumn title="Sections" items={sections} />
+        <div className="col-span-2 md:col-span-2 lg:col-span-1">
+          <FooterColumn
+            title="Sections"
+            items={sections}
+            listClassName="grid grid-cols-2 gap-x-4 gap-y-1 lg:gap-y-2"
+          />
+        </div>
         <FooterColumn title="Company" items={company} />
         <FooterColumn title="Legal" items={legal} />
       </div>
+
       <div className="border-t border-[#2a2f38]">
         <div className="container-page py-4 text-center text-[12px]">
           © 2026 REO Current. All rights reserved.
